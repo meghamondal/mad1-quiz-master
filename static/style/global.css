@@ -1,0 +1,30 @@
+.new-container {
+  display: flex;
+  justify-content: center;
+  padding-top: 5rem;
+  
+}
+
+form {
+  max-width: fit-content;
+  border: 1px solid rgb(18, 82, 164);
+  padding: 2rem;
+  border-radius: 1.5rem;
+  background-color: aliceblue;
+}
+
+.flex {
+  display: flex;
+  
+}
+
+.flex * {
+  margin: 1rem;
+  width: fit-content;
+}
+
+.center {
+  max-width: fit-content;
+  justify-content: center;
+  margin: auto;
+}

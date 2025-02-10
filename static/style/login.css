@@ -1,0 +1,28 @@
+.main-container {
+  display: flex;
+  justify-content: center;
+  padding-top: 5rem;
+  
+}
+
+form {
+  max-width: fit-content;
+  border: 1px solid rgb(18, 82, 164);
+  padding: 2rem;
+  border-radius: 1.5rem;
+  background-color: aliceblue;
+  
+}
+
+.center {
+  max-width: fit-content;
+  justify-content: center;
+  margin: auto;
+}
+
+.error_msg{
+  text-align:center;
+  margin:auto;
+  color:rgb(155, 60, 5);
+}
+
