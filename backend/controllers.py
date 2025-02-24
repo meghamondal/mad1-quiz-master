@@ -26,5 +26,11 @@ def login():
 def admin_dashboard():
   if request.method=="GET":
     return render_template("admin_dashboard.html")
+  
+  @app.route("/register",method=['GET','POST'])
+  def register():
+    if request.method=='GET':
+      return render_template('register.html')
+    
 
     

@@ -8,13 +8,15 @@ class Authentication(db.Model):
   email=db.Column(db.String, unique=True, nullable=False)
   password=db.Column(db.String, nullable=False)
   role=db.Column(db.String, nullable=False)
+  user_details=db.relationship("User", cascade="all,delete", backref="user", lazy=True)
+
 
 class User(db.Model):
   __tablename__="user"
   user_id=db.Column(db.Integer, primary_key=True)
-  email=db.Column(db.String, unique=True, nullable=False)
-  password=db.Column(db.String, nullable=False)
-  fullname=db.Column(db.String, nullable=False)
+  email=db.Column(db.String, db.ForeignKey("auth.email"), unique=True, nullable=False)
+  f_name=db.Column(db.String, nullable=False) # make 2 variables f_name
+  l_name=db.Column(db.String, nullable=False) 
   qualification=db.Column(db.String)
   dob=db.Column(db.DateTime, nullable=False)
   scores=db.relationship("Scores", cascade="all,delete", backref="user", lazy=True)
