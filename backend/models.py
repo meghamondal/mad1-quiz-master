@@ -39,6 +39,7 @@ class Chapter(db.Model):
 class Quiz(db.Model):
   __tablename__="quiz"
   q_id=db.Column(db.Integer, primary_key=True, nullable=False)
+  name=db.Column(db.String, nullable=False)
   chapter_id=db.Column(db.Integer, db.ForeignKey("chapter.ch_id"), nullable=False)
   date_of_quiz=db.Column(db.DateTime, nullable=False, default=datetime.now())
   time_duration=db.Column(db.Integer, nullable=True, default=60)
@@ -51,6 +52,7 @@ class Question(db.Model):
   ques_id=db.Column(db.Integer, primary_key=True, nullable=False)
   quiz_id=db.Column(db.Integer, db.ForeignKey("quiz.q_id"), nullable=False)
   question_statement=db.Column(db.String, nullable=False)
+  q_title=db.Column(db.String, nullable=False)
   option_1=db.Column(db.Integer, nullable=False)
   option_2=db.Column(db.Integer, nullable=False)
   option_3=db.Column(db.Integer, nullable=False)

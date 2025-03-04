@@ -26,7 +26,7 @@ if (not sub):
 
 chap=db.session.query(Chapter).filter_by(name='Electrostatics').first()
 if(not chap):
-  sub=db.session.query(Subject).filter_by(name='Electrostatics').first()
+  sub=db.session.query(Subject).filter_by(name='Physics').first()
   chap=Chapter(name='Electrostatics', description='Test your knowledge on electric fields, charges, and forces.', subject_id=sub.sub_id)
   db.session.add(chap)
   db.session.commit()
@@ -35,14 +35,14 @@ chap=db.session.query(Chapter).filter_by(name='Electrostatics').first()
 test_quiz=db.session.query(Quiz).filter_by(chapter_id=chap.ch_id).first()
 if(not test_quiz):
   current_date=datetime.now()
-  test_quiz=Quiz(chapter_id=chap.ch_id, date_of_quiz=current_date, time_duration=60, remarks='Quiz.')
+  test_quiz=Quiz(name='Quiz 1', chapter_id=chap.ch_id, date_of_quiz=current_date, time_duration=60, remarks='Quiz.')
   db.session.add(test_quiz)
   db.session.commit()
 
 test_quiz=db.session.query(Quiz).filter_by(chapter_id=chap.ch_id).first()
 ques=db.session.query(Question).filter_by(quiz_id=test_quiz.q_id).first()
 if(not ques):
-  ques=Question(quiz_id=test_quiz.q_id, question_statement='What is the work done in moving a charge of Q through a potential difference of V ?',
+  ques=Question(q_title='Q1',quiz_id=test_quiz.q_id, question_statement='What is the work done in moving a charge of Q through a potential difference of V ?',
                 option_1='Q + V', option_2='Q - V', option_3='Q / V', option_4='Q x V', correct_option='Q x V'  )
   db.session.add(ques)
   db.session.commit()

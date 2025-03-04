@@ -48,37 +48,34 @@
         </div>
       </div>
     </nav>
-    {% for subject in subjects %}
+    
     <div class="container new-container">
-      <div class="title">{{subject.name}}</div>
-      <div class="description">{{subject.description}}</div>
+      <div class="title">{{quiz.name}}</div>
       <table class="table table-striped">
         <table class="table">
           <thead>
             <tr>
-              <th scope="col">S. No</th>
-              <th scope="col">Chapter name</th>
-              <th scope="col">No. of Quizzes</th>
+              <th scope="col">ID</th>
+              <th scope="col">Qestion Title</th>
               <th scope="col" class="text-center">Action</th>
             </tr>
           </thead>
           <tbody>
-            {% for chapter in subject.chapters %}
+            {% for question in questions %}
             <tr>
-              <th scope="row">{{chapter.ch_id}}</th>
-              <td id="clickable"><a onclick="window.location.href='/admin_dashboard/{{subject.sub_id}}/{{chapter.ch_id}}/{{name}}'">{{chapter.name}}</a></td>
-              <td>{{chapter.quizes | length}}</td>
+              <th scope="row">{{question.ques_id}}</th>
+              <td id="clickable"><a onclick="window.location.href='/admin_dashboard/{{quiz.chapter.subject.sub_id}}/{{quiz.chapter.ch_id}}/{{quiz.q_id}}/{{name}}'">{{question.q_title}}</a></td>
               <td><a href="" type="button" class="btn btn-primary">Edit</a>
               <a href="" type="button" class="btn btn-danger">Delete</a></td>
               {% endfor %}
             </tr>
           </tbody>
-        </table>
-        <a href="" type="button" class="btn btn-outline-primary">+Add Chapters </a>
-      </table>
+          <table>
+            <a href="" type="button" class="btn btn-outline-primary">+New Question</a>
+
+          </table>
     </div>
-    {% endfor %}
+ 
   </div>
-  <a href="" type="button" class="btn btn-outline-primary">+New Subject</a>
 </body>
 </html>

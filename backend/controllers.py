@@ -1,6 +1,7 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, redirect, url_for
 from .models import *
 from flask import current_app as app
+
 
 
 @app.route("/")
@@ -16,16 +17,38 @@ def login():
     password=request.form.get("password")
     authen=Authentication.query.filter_by(email=name, password=password).first()
     if authen and authen.role=="admin":
-      return render_template("admin_dashboard.html")
+      return redirect("/admin_dashboard/"+name)
     elif authen and authen.role=="user":
-      return render_template("user_dashboard.html")
+      return redirect("/user_dashboard/"+name)
     else:
       return render_template("login.html", msg="Invalid credentials...")
     
-'''@app.route('/admin_dashboard', methods=["GET","POST"])
-def admin_dashboard():
+@app.route('/admin_dashboard/<name>', methods=["GET","POST"])
+def admin_dashboard(name):
   if request.method=="GET":
-    return render_template("admin_dashboard.html")'''
+    subjects = db.session.query(Subject).all()
+    return render_template("admin_dashboard.html", name=name, subjects=subjects)
+
+
+## for quizzes in a chapter
+@app.route('/admin_dashboard/<int:subject_id>/<int:chapter_id>/<string:name>')
+def quizzes_in_chapters(subject_id, chapter_id, name):
+  quizzes_in_chapters = db.session.query(Chapter).filter((Chapter.subject_id == subject_id) & (Chapter.ch_id == chapter_id)).first().quizes
+  chapter = db.session.query(Chapter).filter(Chapter.ch_id == chapter_id).first()
+  return render_template('quizzes_page.html', quizzes = quizzes_in_chapters, chapter=chapter, name=name)
+
+@app.route('/admin_dashboard/<int:subject_id>/<int:chapter_id>/<int:quiz_id>/<string:name>')
+def questions_in_quizzes(subject_id, chapter_id, quiz_id, name):
+  quiz = db.session.query(Quiz).filter(Quiz.q_id == quiz_id).first()
+  questions_in_quizzes=quiz.questions
+  return render_template('questions_page.html', quiz=quiz, questions = questions_in_quizzes, name=name)
+
+
+
+@app.route('/user_dashboard/<name>', methods=["GET","POST"])
+def user_dashboard(name):
+  if request.method=="GET":
+    return render_template("user_dashboard.html", name=name)
   
 @app.route("/register", methods=['GET','POST'])
 def register():
@@ -50,5 +73,24 @@ def register():
     return render_template("login.html", msg="Registration successfull, please proceed to login now!")
   return render_template('register.html', msg="")
 
-'''@app.route("/admin_dashboard", methods=['GET','POST'])  
-def admin_dashboard():'''
+@app.route("/admin_dashboard/<int:subject_id>/<int:chapter_id>/new_quiz/<string:name>", methods=['GET','POST'])
+def new_quiz(subject_id, chapter_id, name):
+  if request.method=='POST':
+    q_name=request.form.get("name")
+    date_of_quiz=request.form.get("date_of_quiz")
+    if(date_of_quiz):
+      date_of_quiz=datetime.strptime(date_of_quiz, '%Y-%m-%d')
+    time_duration=request.form.get("time_duration")
+    remarks=request.form.get("remarks")
+    chapter = db.session.query(Chapter).filter(Chapter.ch_id == chapter_id).first()
+    new_quiz=Quiz(date_of_quiz=date_of_quiz, time_duration=time_duration, remarks=remarks, name=q_name, chapter=chapter)
+    db.session.add(new_quiz)
+    db.session.commit()
+    return redirect('/admin_dashboard/'+str(subject_id)+"/"+str(chapter_id)+"/"+str(name))
+  
+  elif(request.method=='GET'):
+    chapter = db.session.query(Chapter).filter(Chapter.ch_id == chapter_id).first()
+    return render_template('new_quiz.html', chapter=chapter, name=name)
+    
+
+
