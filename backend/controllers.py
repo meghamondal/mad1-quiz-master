@@ -4,6 +4,7 @@ from flask import current_app as app
 
 
 
+
 @app.route("/")
 def home():
   return render_template("index.html")
@@ -35,7 +36,10 @@ def admin_dashboard(name):
 def quizzes_in_chapters(subject_id, chapter_id, name):
   quizzes_in_chapters = db.session.query(Chapter).filter((Chapter.subject_id == subject_id) & (Chapter.ch_id == chapter_id)).first().quizes
   chapter = db.session.query(Chapter).filter(Chapter.ch_id == chapter_id).first()
-  return render_template('quizzes_page.html', quizzes = quizzes_in_chapters, chapter=chapter, name=name)
+  subject = db.session.query(Subject).filter(Subject.sub_id == subject_id).first()
+  for quiz in quizzes_in_chapters:
+    quiz.date_of_quiz_str = datetime.date(quiz.date_of_quiz)
+  return render_template('quizzes_page.html', quizzes = quizzes_in_chapters, chapter=chapter, subject=subject, name=name)
 
 @app.route('/admin_dashboard/<int:subject_id>/<int:chapter_id>/<int:quiz_id>/<string:name>')
 def questions_in_quizzes(subject_id, chapter_id, quiz_id, name):
@@ -151,3 +155,90 @@ def new_chapter(subject_id, name):
   elif(request.method=='GET'):
     subject = db.session.query(Subject).filter(Subject.sub_id == subject_id).first()
     return render_template('new_chapter.html',subject=subject, name=name)
+  
+@app.route("/admin_dashboard/<int:subject_id>/edit_subject/<string:name>", methods=['GET','POST'])
+def edit_subject(subject_id,name):
+  if request.method=='POST':
+    subject = db.session.query(Subject).filter(Subject.sub_id == subject_id).first()
+    name=request.form.get("name")
+    description=request.form.get("description")
+    subject.name=name 
+    subject.description=description
+    db.session.commit()
+    return redirect('/admin_dashboard/'+"/"+str(name))
+  
+  elif(request.method=='GET'):
+    subject = db.session.query(Subject).filter(Subject.sub_id == subject_id).first()
+    return render_template('edit_subject.html',subject=subject, name=name)
+  
+
+@app.route("/admin_dashboard/<int:subject_id>/delete_subject/<string:name>", methods=['GET','POST'])
+def delete_subject(subject_id,name):
+  if request.method=='POST':
+    subject = db.session.query(Subject).filter(Subject.sub_id == subject_id).first()
+    db.session.delete(subject)
+    db.session.commit()
+    return redirect('/admin_dashboard/'+"/"+str(name))
+  
+  elif(request.method=='GET'):
+    subject = db.session.query(Subject).filter(Subject.sub_id == subject_id).first()
+    return render_template('delete_subject.html',subject=subject, name=name)
+  
+
+@app.route("/admin_dashboard/<int:subject_id>/<int:chapter_id>/edit_chapter/<string:name>", methods=['GET','POST'])
+def edit_chapter(subject_id, chapter_id, name):
+  if request.method=='POST':
+    subject = db.session.query(Subject).filter(Subject.sub_id == subject_id).first()
+    chapter = db.session.query(Chapter).filter(Chapter.ch_id == chapter_id).first()
+    name=request.form.get("name")
+    description=request.form.get("description")
+    subject.name=name 
+    subject.description=description
+    db.session.commit()
+    return redirect('/admin_dashboard/'+"/"+str(name))
+  
+  elif(request.method=='GET'):
+    subject = db.session.query(Subject).filter(Subject.sub_id == subject_id).first()
+    chapter = db.session.query(Chapter).filter(Chapter.ch_id == chapter_id).first()
+    return render_template('edit_chapter.html',subject=subject, chapter=chapter, name=name)
+  
+
+@app.route("/admin_dashboard/<int:subject_id>/<int:chapter_id>/delete_chapter/<string:name>", methods=['GET','POST'])
+def delete_chapter(subject_id, chapter_id, name):
+  if request.method=='POST':
+    subject = db.session.query(Subject).filter(Subject.sub_id == subject_id).first()
+    chapter = db.session.query(Chapter).filter(Chapter.ch_id == chapter_id).first()
+    db.session.delete(chapter)
+    db.session.commit()
+    return redirect('/admin_dashboard/'+"/"+str(name))
+  
+  elif(request.method=='GET'):
+    subject = db.session.query(Subject).filter(Subject.sub_id == subject_id).first()
+    chapter = db.session.query(Chapter).filter(Chapter.ch_id == chapter_id).first()
+    return render_template('delete_chapter.html',subject=subject, chapter=chapter, name=name)
+  
+@app.route("/admin_dashboard/<int:subject_id>/<int:chapter_id>/<int:quiz_id>/edit_quiz/<string:name>", methods=['GET','POST'])
+def edit_quiz(subject_id, chapter_id, quiz_id, name):
+  if request.method=='POST':
+    subject = db.session.query(Subject).filter(Subject.sub_id == subject_id).first()
+    chapter = db.session.query(Chapter).filter(Chapter.ch_id == chapter_id).first()
+    quiz = db.session.query(Quiz).filter(Quiz.q_id == quiz_id).first()
+    quiz_name=request.form.get("name")
+    date_of_quiz=request.form.get("date_of_quiz")
+    if(date_of_quiz):
+      date_of_quiz=datetime.strptime(date_of_quiz, '%Y-%m-%d')
+    time_duration=request.form.get("time_duration")
+    remarks=request.form.get("remarks")
+    quiz.name=quiz_name 
+    quiz.date_of_quiz=date_of_quiz
+    quiz.time_duration=time_duration
+    quiz.remarks=remarks
+    db.session.commit()
+    return redirect('/admin_dashboard/'+str(subject_id)+"/"+str(chapter_id)+"/"+str(name))
+  
+  elif(request.method=='GET'):
+    subject = db.session.query(Subject).filter(Subject.sub_id == subject_id).first()
+    chapter = db.session.query(Chapter).filter(Chapter.ch_id == chapter_id).first()
+    quiz = db.session.query(Quiz).filter(Quiz.q_id == quiz_id).first()
+    quiz.date_of_quiz_str = datetime.date(quiz.date_of_quiz)
+    return render_template('edit_quiz.html',subject=subject, chapter=chapter, quiz=quiz, name=name)

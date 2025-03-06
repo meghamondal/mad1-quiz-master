@@ -53,7 +53,8 @@
     {% for subject in subjects %}
     <div class="container new-container">
       <div class="title">{{subject.name}}
-        <a href=""><ion-icon name="pencil-outline" style="font-size: 25px;" ></ion-icon></a>
+        <a onclick="window.location.href='/admin_dashboard/{{subject.sub_id}}/edit_subject/{{name}}'" ><ion-icon name="pencil-outline" style="font-size: 25px;" ></ion-icon></a>
+        <a onclick="window.location.href='/admin_dashboard/{{subject.sub_id}}/delete_subject/{{name}}'"><ion-icon name="trash-outline" style="font-size: 20px;"></ion-icon></a>
       </div>
       <div class="description">{{subject.description}}</div>
       <table class="table table-striped">
@@ -72,8 +73,8 @@
               <th scope="row">{{chapter.ch_id}}</th>
               <td id="clickable"><a onclick="window.location.href='/admin_dashboard/{{subject.sub_id}}/{{chapter.ch_id}}/{{name}}'">{{chapter.name}}</a></td>
               <td>{{chapter.quizes | length}}</td>
-              <td><a href="" type="button" class="btn btn-primary">Edit</a>
-              <a href="" type="button" class="btn btn-danger">Delete</a></td>
+              <td><a onclick="window.location.href='/admin_dashboard/{{subject.sub_id}}/{{chapter.ch_id}}/edit_chapter/{{name}}'" type="button" class="btn btn-primary">Edit</a>
+              <a onclick="window.location.href='/admin_dashboard/{{subject.sub_id}}/{{chapter.ch_id}}/delete_chapter/{{name}}'" type="button" class="btn btn-danger">Delete</a></td>
               {% endfor %}
             </tr>
           </tbody>

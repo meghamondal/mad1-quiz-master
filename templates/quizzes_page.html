@@ -58,6 +58,7 @@
             <tr>
               <th scope="col">ID</th>
               <th scope="col">Quiz Title</th>
+              <th scope="col">Date</th>
               <th scope="col" class="text-center">Action</th>
             </tr>
           </thead>
@@ -66,7 +67,8 @@
             <tr>
               <th scope="row">{{quiz.q_id}}</th>
               <td id="clickable"><a onclick="window.location.href='/admin_dashboard/{{quiz.chapter.subject.sub_id}}/{{quiz.chapter.ch_id}}/{{quiz.q_id}}/{{name}}'">{{quiz.name}}</a></td>
-              <td><a href="" type="button" class="btn btn-primary">Edit</a>
+              <td>{{quiz.date_of_quiz_str}}</td>
+              <td><a onclick="window.location.href='/admin_dashboard/{{subject.sub_id}}/{{chapter.ch_id}}/{{quiz.q_id}}/edit_quiz/{{name}}'" type="button" class="btn btn-primary">Edit</a>
               <a href="" type="button" class="btn btn-danger">Delete</a></td>
               {% endfor %}
             </tr>
