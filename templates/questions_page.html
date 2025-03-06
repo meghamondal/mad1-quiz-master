@@ -64,14 +64,14 @@
             {% for question in questions %}
             <tr>
               <th scope="row">{{question.ques_id}}</th>
-              <td id="clickable"><a onclick="window.location.href='/admin_dashboard/{{quiz.chapter.subject.sub_id}}/{{quiz.chapter.ch_id}}/{{quiz.q_id}}/{{name}}'">{{question.q_title}}</a></td>
+              <td id="clickable"><a onclick="window.location.href='/admin_dashboard/{{quiz.chapter.subject.sub_id}}/{{quiz.chapter.ch_id}}/{{quiz.q_id}}/{{question.ques_id}}/{{name}}'">{{question.q_title}}</a></td>
               <td><a href="" type="button" class="btn btn-primary">Edit</a>
               <a href="" type="button" class="btn btn-danger">Delete</a></td>
               {% endfor %}
             </tr>
           </tbody>
           <table>
-            <a href="" type="button" class="btn btn-outline-primary">+New Question</a>
+            <a  type="button" class="btn btn-outline-primary" onclick="window.location.href='/admin_dashboard/{{chapter.subject.sub_id}}/{{chapter.ch_id}}/{{quiz.q_id}}/new_question/{{name}}'">+New Question</a>
 
           </table>
     </div>

@@ -2,3 +2,25 @@
   text-decoration: underline;
   cursor: pointer;
 }
+
+.quiz-container{
+  width: 50%;
+  margin: auto;
+  border: 1px solid #ccc;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0.1); 
+}
+
+.question{
+  font-size: 18px;
+}
+
+.options{
+  list-style-type: none;
+  padding: 0;
+}
+
+
+.option{
+  margin-bottom: 10px;
+}

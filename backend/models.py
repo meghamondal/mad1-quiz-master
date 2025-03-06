@@ -53,10 +53,10 @@ class Question(db.Model):
   quiz_id=db.Column(db.Integer, db.ForeignKey("quiz.q_id"), nullable=False)
   question_statement=db.Column(db.String, nullable=False)
   q_title=db.Column(db.String, nullable=False)
-  option_1=db.Column(db.Integer, nullable=False)
-  option_2=db.Column(db.Integer, nullable=False)
-  option_3=db.Column(db.Integer, nullable=False)
-  option_4=db.Column(db.Integer, nullable=False)
+  option_1=db.Column(db.String, nullable=False)
+  option_2=db.Column(db.String, nullable=False)
+  option_3=db.Column(db.String, nullable=False)
+  option_4=db.Column(db.String, nullable=False)
   correct_option=db.Column(db.Integer, nullable=False)
 
 class Scores(db.Model):

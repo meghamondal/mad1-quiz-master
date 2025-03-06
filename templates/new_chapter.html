@@ -9,13 +9,52 @@
 </head>
 <body>
   <div class="container main-container">
-    
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Admin Dashboard</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Quiz</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Summary</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Customer Details</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Logout</a>
+            </li>
+            
+            
+          </ul>
+          <form class="d-flex" role="search" method="POST" action="">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+          </form>
+          <span class="nav=text">
+            Welcome to {{name}}
+          </span>
+        </div>
+      </div>
+    </nav>
   
-    <form>
+    <form method="POST" action="/admin_dashboard/{{subject.sub_id}}/new_chapter/{{name}}">
+      <div class="mb-3">
+        <label for="subject_name" class="form-label">Subject Name : </label>
+        <input type="text" class="form-control" id="subject_name" name="subject_name" aria-describedby="subject_name" placeholder="subject_name" value="{{subject.name}}" readonly>
+      </div>
       <div class="mb-3 center"><h3>New Chapter</h3></div>
       <div class="mb-3">
         <label for="name" class="form-label">Name : </label>
-        <input type="text" class="form-control" id="name" name="name" aria-describedby="subjectName" placeholder="Subject">
+        <input type="text" class="form-control" id="name" name="name" aria-describedby="subjectName" placeholder="Chapter">
       </div>
       <div class="mb-3">
         <label for="description" class="form-label">Description : </label>
@@ -23,7 +62,7 @@
       </div>
       <div class="mb-3 center">
         <button type="submit" class="btn btn-primary">Save</button>
-        <a href="/admin/{{name}}" type="Button" class="btn btn-primary">Cancel</a>
+        <a onclick="window.location.href='/admin_dashboard/{{subject.sub_id}}/{{name}}'" type="Button" class="btn btn-primary">Cancel</a>
       </div>
     </form>
 </div>

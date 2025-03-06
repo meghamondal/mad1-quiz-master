@@ -43,7 +43,7 @@ test_quiz=db.session.query(Quiz).filter_by(chapter_id=chap.ch_id).first()
 ques=db.session.query(Question).filter_by(quiz_id=test_quiz.q_id).first()
 if(not ques):
   ques=Question(q_title='Q1',quiz_id=test_quiz.q_id, question_statement='What is the work done in moving a charge of Q through a potential difference of V ?',
-                option_1='Q + V', option_2='Q - V', option_3='Q / V', option_4='Q x V', correct_option='Q x V'  )
+                option_1='Q + V', option_2='Q - V', option_3='Q / V', option_4='Q x V', correct_option=1)
   db.session.add(ques)
   db.session.commit()
 

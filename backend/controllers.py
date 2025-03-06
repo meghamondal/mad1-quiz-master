@@ -41,7 +41,15 @@ def quizzes_in_chapters(subject_id, chapter_id, name):
 def questions_in_quizzes(subject_id, chapter_id, quiz_id, name):
   quiz = db.session.query(Quiz).filter(Quiz.q_id == quiz_id).first()
   questions_in_quizzes=quiz.questions
-  return render_template('questions_page.html', quiz=quiz, questions = questions_in_quizzes, name=name)
+  chapter = db.session.query(Chapter).filter(Chapter.ch_id == chapter_id).first()
+  return render_template('questions_page.html', quiz=quiz, questions = questions_in_quizzes, chapter=chapter, name=name)
+
+@app.route('/admin_dashboard/<int:subject_id>/<int:chapter_id>/<int:quiz_id>/<int:question_id>/<string:name>')
+def question_details(subject_id, chapter_id, quiz_id, question_id, name):
+  if request.method == 'GET':
+    question = db.session.query(Question).filter(Question.ques_id == question_id).first()
+    return render_template('admin_quiz.html', question=question, name=name)
+
 
 
 
@@ -91,6 +99,55 @@ def new_quiz(subject_id, chapter_id, name):
   elif(request.method=='GET'):
     chapter = db.session.query(Chapter).filter(Chapter.ch_id == chapter_id).first()
     return render_template('new_quiz.html', chapter=chapter, name=name)
+  
+@app.route("/admin_dashboard/<int:subject_id>/<int:chapter_id>/<int:quiz_id>/new_question/<string:name>", methods=['GET','POST'])
+def new_question(subject_id, chapter_id, quiz_id, name):
+  if request.method=='POST':
+    q_title=request.form.get("q_title")
+    q_statement=request.form.get("q_statement")
+    option_1=request.form.get("option_1")
+    option_2=request.form.get("option_2")
+    option_3=request.form.get("option_3")
+    option_4=request.form.get("option_4")
+    correct_option=request.form.get("correct_option")
+    chapter = db.session.query(Chapter).filter(Chapter.ch_id == chapter_id).first()
+    new_question=Question(q_title=q_title, quiz_id=quiz_id, question_statement=q_statement, option_1=option_1, option_2=option_2, option_3=option_3, option_4=option_4, correct_option=correct_option)
+    db.session.add(new_question)
+    db.session.commit()
+    return redirect('/admin_dashboard/'+str(subject_id)+"/"+str(chapter_id)+"/"+str(quiz_id)+"/"+str(name))
+  
+  elif(request.method=='GET'):
+    chapter = db.session.query(Chapter).filter(Chapter.ch_id == chapter_id).first()
+    quiz = db.session.query(Quiz).filter(Quiz.q_id == quiz_id).first()
+    return render_template('new_question.html', chapter=chapter, quiz=quiz, name=name)
+    
+
+@app.route("/admin_dashboard/new_subject/<string:name>", methods=['GET','POST'])
+def new_subject(name):
+  if request.method=='POST':
+    name=request.form.get("name")
+    description=request.form.get("description")
+    new_subject=Subject(name=name, description=description)
+    db.session.add(new_subject)
+    db.session.commit()
+    return redirect('/admin_dashboard/'+"/"+str(name))
+  
+  elif(request.method=='GET'):
+    return render_template('new_subject.html', name=name)
     
 
 
+@app.route("/admin_dashboard/<int:subject_id>/new_chapter/<string:name>", methods=['GET','POST'])
+def new_chapter(subject_id, name):
+  if request.method=='POST':
+    chap_name=request.form.get("name")
+    description=request.form.get("description")
+    subject = db.session.query(Subject).filter(Subject.sub_id == subject_id).first()
+    new_chapter=Chapter(subject_id=subject.sub_id, name=chap_name, description=description)
+    db.session.add(new_chapter)
+    db.session.commit()
+    return redirect('/admin_dashboard/'+str(name))
+  
+  elif(request.method=='GET'):
+    subject = db.session.query(Subject).filter(Subject.sub_id == subject_id).first()
+    return render_template('new_chapter.html',subject=subject, name=name)

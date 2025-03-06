@@ -9,20 +9,55 @@
 </head>
 <body>
   <div class="container main-container">
-    
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Admin Dashboard</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Quiz</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Summary</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Customer Details</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Logout</a>
+            </li>
+            
+            
+          </ul>
+          <form class="d-flex" role="search" method="POST" action="">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+          </form>
+          <span class="nav=text">
+            Welcome to {{name}}
+          </span>
+        </div>
+      </div>
+    </nav>
   
-    <form>
+    <form method="POST" action="/admin_dashboard/{{chapter.subject.sub_id}}/{{chapter.ch_id}}/{{quiz.q_id}}/new_question/{{name}}">
       <div class="mb-3 center"><h3>New Question</h3></div>
       <div class="mb-3">
-        <label for="ch_id" class="form-label">Chapter Id : </label>
-        <input type="text" class="form-control" id="ch_id" name="ch_id" aria-describedby="chapterId" placeholder="Chapter Id">
+        <label for="chapter_name" class="form-label">Chapter Name : </label>
+        <input type="text" class="form-control" id="chapter_name" name="chapter_name" aria-describedby="chapter_name" placeholder="chapter_namr" value="{{chapter.name}}" readonly>
       </div>
       <div class="mb-3">
-        <label for="q_title" class="form-label">Question title : </label>
+        <label for="q_title" class="form-label">Question Title : </label>
         <input type="text" class="form-control" id="q_title" name="q_title" aria-describedby="questionTitle" placeholder="Question Title">
       </div>
       <div class="mb-3">
-        <label for="q_statement" class="form-label">Question Title : </label>
+        <label for="q_statement" class="form-label">Question Statement : </label>
         <textarea class="form-control" id="q_statement" name="q_statement" rows="3"></textarea>
       </div>
       <form>
@@ -45,12 +80,11 @@
         </div>
         <div class="mb-3">
           <label for="correct" class="form-label">Correct Option : </label>
-          <input type="text" class="form-control" id="correct" name="correct" aria-describedby="correct" placeholder="correct ✓">
+          <input type="text" class="form-control" id="correct_option" name="correct_option" aria-describedby="correct_option" placeholder="correct ✓">
         </div>
-      </form>
       <div class="mb-3 center">
         <button type="submit" class="btn btn-primary">Save and Next</button>
-        <a href="" type="Button" class="btn btn-primary">Close</a>
+        <a onclick="window.location.href='/admin_dashboard/{{chapter.subject.sub_id}}/{{chapter.ch_id}}/{{quiz.q_id}}/{{name}}'" type="Button" class="btn btn-primary">Cancel</a>
       </div>
     </form>
 </div>

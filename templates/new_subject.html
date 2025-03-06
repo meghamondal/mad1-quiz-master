@@ -9,9 +9,43 @@
 </head>
 <body>
   <div class="container main-container">
-    
-  
-    <form>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+      <div class="container-fluid">
+        <a class="navbar-brand" href="#">Admin Dashboard</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link active" aria-current="page" href="#">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Quiz</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Summary</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Customer Details</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">Logout</a>
+            </li>
+            
+            
+          </ul>
+          <form class="d-flex" role="search" method="POST" action="">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-success" type="submit">Search</button>
+          </form>
+          <span class="nav=text">
+            Welcome to {{name}}
+          </span>
+        </div>
+      </div>
+    </nav>
+    <form method="POST" action="/admin_dashboard/new_subject/{{name}}">
       <div class="mb-3 center"><h3>New Subject</h3></div>
       <div class="mb-3">
         <label for="name" class="form-label">Name : </label>
@@ -23,7 +57,7 @@
       </div>
       <div class="mb-3 center">
         <button type="submit" class="btn btn-primary">Save</button>
-        <a href="/admin/{{name}}" type="Button" class="btn btn-primary">Cancel</a>
+        <a onclick="window.location.href='/admin_dashboard/{{name}}'" type="Button" class="btn btn-primary">Cancel</a>
       </div>
     </form>
 </div>
