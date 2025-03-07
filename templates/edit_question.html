@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <link href="static/style/login.css" rel="stylesheet">
-  <title>New Question</title>
+  <title>Edit Question</title>
 </head>
 <body>
   <div class="container main-container">
@@ -45,45 +45,44 @@
         </div>
       </div>
     </nav>
-  
-    <form method="POST" action="/admin_dashboard/{{chapter.subject.sub_id}}/{{chapter.ch_id}}/{{quiz.q_id}}/new_question/{{name}}">
-      <div class="mb-3 center"><h3>New Question</h3></div>
+    <form method="POST" action="/admin_dashboard/{{subject.sub_id}}/{{chapter.ch_id}}/{{quiz.q_id}}/{{question.ques_id}}/edit_question/{{name}}">
+      <div class="mb-3 center"><h3>Edit Question</h3></div>
       <div class="mb-3">
         <label for="chapter_name" class="form-label">Chapter Name : </label>
         <input type="text" class="form-control" id="chapter_name" name="chapter_name" aria-describedby="chapter_name" placeholder="chapter_name" value="{{chapter.name}}" readonly>
       </div>
       <div class="mb-3">
         <label for="q_title" class="form-label">Question Title : </label>
-        <input type="text" class="form-control" id="q_title" name="q_title" aria-describedby="questionTitle" placeholder="Question Title">
+        <input type="text" class="form-control" id="q_title" name="q_title" aria-describedby="questionTitle" placeholder="Question Title" value="{{question.q_title}}">
       </div>
       <div class="mb-3">
         <label for="q_statement" class="form-label">Question Statement : </label>
-        <textarea class="form-control" id="q_statement" name="q_statement" rows="3"></textarea>
+        <textarea class="form-control" id="question_statement" name="question_statement" rows="3" value="">{{question.question_statement}}</textarea>
       </div>
       <form>
         <div class="mb-3 center"><h3> Single Option Correct</h3></div>
         <div class="mb-3">
           <label for="option_1" class="form-label">Option 1 : </label>
-          <input type="text" class="form-control" id="option_1" name="option_1" aria-describedby="option_1" placeholder="Option 1">
+          <input type="text" class="form-control" id="option_1" name="option_1" aria-describedby="option_1" placeholder="Option 1" value="{{question.option_1}}">
         </div>
         <div class="mb-3">
           <label for="option_2" class="form-label">Option 2 : </label>
-          <input type="text" class="form-control" id="option_2" name="option_2" aria-describedby="option_2" placeholder="Option 2">
+          <input type="text" class="form-control" id="option_2" name="option_2" aria-describedby="option_2" placeholder="Option 2" value="{{question.option_2}}">
         </div>
         <div class="mb-3">
           <label for="option_3" class="form-label">Option 3 : </label>
-          <input type="text" class="form-control" id="option_3" name="option_3" aria-describedby="option_3" placeholder="Option 3">
+          <input type="text" class="form-control" id="option_3" name="option_3" aria-describedby="option_3" placeholder="Option 3" value="{{question.option_3}}">
         </div>
         <div class="mb-3">
           <label for="option_4" class="form-label">Option 4 : </label>
-          <input type="text" class="form-control" id="option_4" name="option_4" aria-describedby="option_4" placeholder="Option 4">
+          <input type="text" class="form-control" id="option_4" name="option_4" aria-describedby="option_4" placeholder="Option 4" value="{{question.option_4}}">
         </div>
         <div class="mb-3">
           <label for="correct" class="form-label">Correct Option : </label>
-          <input type="text" class="form-control" id="correct_option" name="correct_option" aria-describedby="correct_option" placeholder="correct ✓">
+          <input type="text" class="form-control" id="correct_option" name="correct_option" aria-describedby="correct_option" placeholder="correct ✓" value="{{question.correct_option}}">
         </div>
       <div class="mb-3 center">
-        <button type="submit" class="btn btn-primary">Save and Next</button>
+        <button type="submit" class="btn btn-primary">Save</button>
         <a onclick="window.location.href='/admin_dashboard/{{chapter.subject.sub_id}}/{{chapter.ch_id}}/{{quiz.q_id}}/{{name}}'" type="Button" class="btn btn-primary">Cancel</a>
       </div>
     </form>

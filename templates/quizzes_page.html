@@ -69,7 +69,7 @@
               <td id="clickable"><a onclick="window.location.href='/admin_dashboard/{{quiz.chapter.subject.sub_id}}/{{quiz.chapter.ch_id}}/{{quiz.q_id}}/{{name}}'">{{quiz.name}}</a></td>
               <td>{{quiz.date_of_quiz_str}}</td>
               <td><a onclick="window.location.href='/admin_dashboard/{{subject.sub_id}}/{{chapter.ch_id}}/{{quiz.q_id}}/edit_quiz/{{name}}'" type="button" class="btn btn-primary">Edit</a>
-              <a href="" type="button" class="btn btn-danger">Delete</a></td>
+              <a onclick="window.location.href='/admin_dashboard/{{subject.sub_id}}/{{chapter.ch_id}}/{{quiz.q_id}}/delete_quiz/{{name}}'" type="button" class="btn btn-danger">Delete</a></td>
               {% endfor %}
             </tr>
           </tbody>
