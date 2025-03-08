@@ -24,3 +24,7 @@
 .option{
   margin-bottom: 10px;
 }
+
+li a {
+  cursor: pointer;
+}

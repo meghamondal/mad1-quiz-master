@@ -41,6 +41,7 @@ def quizzes_in_chapters(subject_id, chapter_id, name):
     quiz.date_of_quiz_str = datetime.date(quiz.date_of_quiz)
   return render_template('quizzes_page.html', quizzes = quizzes_in_chapters, chapter=chapter, subject=subject, name=name)
 
+#for questions in quiz
 @app.route('/admin_dashboard/<int:subject_id>/<int:chapter_id>/<int:quiz_id>/<string:name>')
 def questions_in_quizzes(subject_id, chapter_id, quiz_id, name):
   quiz = db.session.query(Quiz).filter(Quiz.q_id == quiz_id).first()
@@ -49,6 +50,7 @@ def questions_in_quizzes(subject_id, chapter_id, quiz_id, name):
   subject = db.session.query(Subject).filter(Subject.sub_id == subject_id).first()
   return render_template('questions_page.html', quiz=quiz, questions = questions_in_quizzes, chapter=chapter, subject=subject, name=name)
 
+#for question details
 @app.route('/admin_dashboard/<int:subject_id>/<int:chapter_id>/<int:quiz_id>/<int:question_id>/<string:name>')
 def question_details(subject_id, chapter_id, quiz_id, question_id, name):
   if request.method == 'GET':
@@ -86,6 +88,7 @@ def register():
     return render_template("login.html", msg="Registration successfull, please proceed to login now!")
   return render_template('register.html', msg="")
 
+#for new quiz
 @app.route("/admin_dashboard/<int:subject_id>/<int:chapter_id>/new_quiz/<string:name>", methods=['GET','POST'])
 def new_quiz(subject_id, chapter_id, name):
   if request.method=='POST':
@@ -105,6 +108,7 @@ def new_quiz(subject_id, chapter_id, name):
     chapter = db.session.query(Chapter).filter(Chapter.ch_id == chapter_id).first()
     return render_template('new_quiz.html', chapter=chapter, name=name)
   
+#for new question
 @app.route("/admin_dashboard/<int:subject_id>/<int:chapter_id>/<int:quiz_id>/new_question/<string:name>", methods=['GET','POST'])
 def new_question(subject_id, chapter_id, quiz_id, name):
   if request.method=='POST':
@@ -127,6 +131,8 @@ def new_question(subject_id, chapter_id, quiz_id, name):
     return render_template('new_question.html', chapter=chapter, quiz=quiz, name=name)
     
 
+
+#foe new subject
 @app.route("/admin_dashboard/new_subject/<string:name>", methods=['GET','POST'])
 def new_subject(name):
   if request.method=='POST':
@@ -141,7 +147,7 @@ def new_subject(name):
     return render_template('new_subject.html', name=name)
     
 
-
+#for new chapter
 @app.route("/admin_dashboard/<int:subject_id>/new_chapter/<string:name>", methods=['GET','POST'])
 def new_chapter(subject_id, name):
   if request.method=='POST':
@@ -156,7 +162,8 @@ def new_chapter(subject_id, name):
   elif(request.method=='GET'):
     subject = db.session.query(Subject).filter(Subject.sub_id == subject_id).first()
     return render_template('new_chapter.html',subject=subject, name=name)
-  
+
+#for edit subject 
 @app.route("/admin_dashboard/<int:subject_id>/edit_subject/<string:name>", methods=['GET','POST'])
 def edit_subject(subject_id,name):
   if request.method=='POST':
@@ -172,7 +179,7 @@ def edit_subject(subject_id,name):
     subject = db.session.query(Subject).filter(Subject.sub_id == subject_id).first()
     return render_template('edit_subject.html',subject=subject, name=name)
   
-
+#for delete subject
 @app.route("/admin_dashboard/<int:subject_id>/delete_subject/<string:name>", methods=['GET','POST'])
 def delete_subject(subject_id,name):
   if request.method=='POST':
@@ -186,6 +193,7 @@ def delete_subject(subject_id,name):
     return render_template('delete_subject.html',subject=subject, name=name)
   
 
+#for edit chapter
 @app.route("/admin_dashboard/<int:subject_id>/<int:chapter_id>/edit_chapter/<string:name>", methods=['GET','POST'])
 def edit_chapter(subject_id, chapter_id, name):
   if request.method=='POST':
@@ -203,7 +211,7 @@ def edit_chapter(subject_id, chapter_id, name):
     chapter = db.session.query(Chapter).filter(Chapter.ch_id == chapter_id).first()
     return render_template('edit_chapter.html',subject=subject, chapter=chapter, name=name)
   
-
+#for delete chapter
 @app.route("/admin_dashboard/<int:subject_id>/<int:chapter_id>/delete_chapter/<string:name>", methods=['GET','POST'])
 def delete_chapter(subject_id, chapter_id, name):
   if request.method=='POST':
@@ -218,6 +226,7 @@ def delete_chapter(subject_id, chapter_id, name):
     chapter = db.session.query(Chapter).filter(Chapter.ch_id == chapter_id).first()
     return render_template('delete_chapter.html',subject=subject, chapter=chapter, name=name)
   
+#for edit chapter
 @app.route("/admin_dashboard/<int:subject_id>/<int:chapter_id>/<int:quiz_id>/edit_quiz/<string:name>", methods=['GET','POST'])
 def edit_quiz(subject_id, chapter_id, quiz_id, name):
   if request.method=='POST':
@@ -245,7 +254,7 @@ def edit_quiz(subject_id, chapter_id, quiz_id, name):
     return render_template('edit_quiz.html',subject=subject, chapter=chapter, quiz=quiz, name=name)
   
 
-    
+#for delete quiz  
 @app.route("/admin_dashboard/<int:subject_id>/<int:chapter_id>/<int:quiz_id>/delete_quiz/<string:name>", methods=['GET','POST'])
 def delete_quiz(subject_id, chapter_id, quiz_id, name):
   if request.method=='POST':
@@ -263,7 +272,7 @@ def delete_quiz(subject_id, chapter_id, quiz_id, name):
     quiz.date_of_quiz_str = datetime.date(quiz.date_of_quiz)
     return render_template('delete_quiz.html',subject=subject, chapter=chapter, quiz=quiz, name=name)
   
-
+#for edit question
 @app.route("/admin_dashboard/<int:subject_id>/<int:chapter_id>/<int:quiz_id>/<int:question_id>/edit_question/<string:name>", methods=['GET','POST'])
 def edit_question(subject_id, chapter_id, quiz_id, question_id, name):
   if request.method=='POST':
@@ -295,7 +304,7 @@ def edit_question(subject_id, chapter_id, quiz_id, question_id, name):
     quiz = db.session.query(Quiz).filter(Quiz.q_id == quiz_id).first()
     return render_template('edit_question.html',subject=subject, chapter=chapter,question=question, quiz=quiz, name=name)
   
-
+#for delete question
 @app.route("/admin_dashboard/<int:subject_id>/<int:chapter_id>/<int:quiz_id>/<int:question_id>/delete_question/<string:name>", methods=['GET','POST'])
 def delete_question(subject_id, chapter_id, quiz_id, question_id, name):
   if request.method=='POST':
