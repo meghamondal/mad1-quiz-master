@@ -60,10 +60,7 @@ def question_details(subject_id, chapter_id, quiz_id, question_id, name):
 
 
 
-@app.route('/user_dashboard/<name>', methods=["GET","POST"])
-def user_dashboard(name):
-  if request.method=="GET":
-    return render_template("user_dashboard.html", name=name)
+  
   
 @app.route("/register", methods=['GET','POST'])
 def register():
@@ -323,3 +320,31 @@ def delete_question(subject_id, chapter_id, quiz_id, question_id, name):
     quiz = db.session.query(Quiz).filter(Quiz.q_id == quiz_id).first()
     return render_template('delete_question.html',subject=subject, chapter=chapter,question=question, quiz=quiz, name=name)
   
+
+
+
+
+
+
+######################################## User Controllers ##################################################################
+
+
+@app.route('/user_dashboard/<name>', methods=["GET","POST"])
+def user_dashboard(name):
+  if request.method=="GET":
+    quizzes = db.session.query(Quiz).order_by((Quiz.date_of_quiz)).all() #check for reverse flag
+    for quiz in  quizzes:
+      questions = db.session.query(Question).filter(Question.quiz_id == quiz.q_id).all()
+      quiz.questions = questions
+    return render_template("user_dashboard.html", name=name, quizzes=quizzes)
+  
+@app.route('/explore_subject/<string:name>')
+def subject_for_quizzes(name):
+  subjects= db.session.query(Subject).all()
+  return render_template('subjectwise_quizzes.html', subjects=subjects, name=name)
+
+@app.route('/explore_subject/<int:subject_id>/<string:name>')
+def chapter_for_quizzes(subject_id, name):
+  
+  chapters= db.session.query(Chapter).filter(Chapter.subject_id == subject_id).all()
+  return render_template('chapter_quizzes.html', chapters=chapters, name=name)
