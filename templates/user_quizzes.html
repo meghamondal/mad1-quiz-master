@@ -48,7 +48,7 @@
         </div>
       </div>
     </nav>
-    <h3>Upcoming Quizzes</h3>
+    <h3>Quizzes in {{chapter.name}} chapter</h3>
     
     <div class="container new-container">
       
@@ -76,7 +76,7 @@
               <td >{{quiz.chapter.subject.name}}</td>
               <td >{{quiz.chapter.name}}</td>
               <td>{{quiz.questions | length}}</td>
-              <td><a href="#" type="button" class="btn btn-success">Start</a>
+              <td><a href="/attempt_quiz/{{quiz.q_id}}/{{name}}" type="button" class="btn btn-success">Start</a>
               {% endfor %}
             </tr>
           </tbody>

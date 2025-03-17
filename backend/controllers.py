@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 from .models import *
 from flask import current_app as app
+from datetime import datetime
 
 
 
@@ -348,3 +349,31 @@ def chapter_for_quizzes(subject_id, name):
   
   chapters= db.session.query(Chapter).filter(Chapter.subject_id == subject_id).all()
   return render_template('chapter_quizzes.html', chapters=chapters, name=name)
+
+@app.route('/explore_subject/<int:subject_id>/<int:chapter_id>/<string:name>')
+def quiz_for_quizzes( subject_id, chapter_id, name):
+  quizzes= db.session.query(Quiz).filter(Quiz.chapter_id == chapter_id).all()
+  chapter = db.session.query(Chapter).filter(Chapter.ch_id == chapter_id).first()
+  return render_template('user_quizzes.html', chapter=chapter, quizzes=quizzes, name=name)
+
+@app.route('/attempt_quiz/<int:quiz_id>/<string:name>', methods=['GET','POST'])
+def mainquiz(quiz_id, name):
+  if request.method == 'GET':
+    quiz = db.session.query(Quiz).filter(Quiz.q_id == quiz_id).first()
+    questions = db.session.query(Question).filter(Question.quiz_id == quiz_id).all()
+    return render_template('user_mainquiz.html', quiz=quiz, questions=questions, name=name)
+  elif request.method == 'POST':
+    questions = db.session.query(Question).filter(Question.quiz_id == quiz_id).all()
+    score=0
+    for question in questions:
+      selected_option = request.form.get(f"{question.ques_id}")
+      print(selected_option)
+      correct_option = question.correct_option
+      if(int(selected_option)==correct_option):
+        score += 1
+    print(f'score: {score}') #to be removed
+    user = db.session.query(User).filter(User.email == name).first()
+    new_score = Scores(quiz_id=int(quiz_id), user_id=user.user_id, timestamp_of_attempt=datetime.now(), total_scored=score)
+    db.session.add(new_score)
+    db.session.commit()
+    return redirect('/quiz_submited/'+str(quiz_id)+"/"+str(name))

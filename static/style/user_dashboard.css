@@ -3,25 +3,25 @@
   cursor: pointer;
 }
 
-.quiz-container{
-  width: 50%;
+.quiz-container {
   margin: auto;
-  border: 1px solid #ccc;
-  padding: 20px;
-  box-shadow: 0 0 10px rgba(0, 0, 0.1); 
+  border: 1px solid #ccccccf5;
+  width: 60%;
+  padding: 30px;
+  box-shadow: 0 0 10px black; 
 }
 
-.question{
+.question {
   font-size: 18px;
 }
 
-.options{
+.options {
   list-style-type: none;
   padding: 0;
 }
 
 
-.option{
+.option {
   margin-bottom: 10px;
 }
 
@@ -38,4 +38,9 @@ li a {
 
 .flex-container > div {
   margin: 1rem;
+}
+
+.go-to-button {
+  justify-content: center;
+  margin: auto;
 }

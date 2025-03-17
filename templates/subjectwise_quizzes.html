@@ -23,7 +23,7 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">Home</a>
+              <a class="nav-link active" aria-current="page" href="/user_dashboard/{{name}}">Home</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="/explore_subject/{{name}}">Subjects</a>
@@ -53,8 +53,11 @@
     
       <div class="card" style="width: 18rem;">
         <div class="card-body">
-          <h5 class="title" id="clickable"><a onclick="window.location.href='/explore_subject/{{subject.sub_id}}/{{name}}'">{{subject.name}}</a></h5>
+          <h5 class="title">{{subject.name}}</h5>
           <p class="description">{{subject.description}}</p>
+        </div>
+        <div class="mb-3 center go-to-button">
+          <a onclick="window.location.href='/explore_subject/{{subject.sub_id}}/{{name}}'" type="Button" class="btn btn-secondary">Explore Subject</a>
         </div>
       </div>
     

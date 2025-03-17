@@ -48,43 +48,26 @@
         </div>
       </div>
     </nav>
-    <h3>Upcoming Quizzes</h3>
-    
-    <div class="container new-container">
+    <div class="quiz-container">
+      <h1 style="text-align: center;">{{quiz.chapter.name}} {{quiz.q_title}}</h1>
+      <form method="POST" action="/attempt_quiz/{{quiz.q_id}}/{{name}}" >
+        <div class="question">
+        {% for question in questions %}
+        <div  name="question_{{question.ques_id}}" id="question">Q{{loop.index}}. {{question.question_statement}}</div>
+        <ul class="options">
+          <li class="option"><input type="radio" name="{{question.ques_id}}" id="option_1" value="1" ><label for="question">&nbsp; {{question.option_1}}</label></li>
+          <li class="option"><input type="radio" name="{{question.ques_id}}" id="option_2" value="2"  ><label for="question">&nbsp; {{question.option_2}}</label></li>
+          <li class="option"><input type="radio" name="{{question.ques_id}}" id="option_3" value="3" ><label for="question">&nbsp; {{question.option_3}}</label></li>
+          <li class="option"><input type="radio" name="{{question.ques_id}}" id="option_4" value="4"  ><label for="question">&nbsp; {{question.option_4}}</label></li>
+        </ul>
+      </div>
+      {% endfor %}
       
-      <table class="table table-striped">
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">Sl No.</th>
-              <th scope="col">Quiz Name</th>
-              <th scope="col">Date & Time </th>
-              <th scope="col">Duration</th>
-              <th scope="col">Subject</th>
-              <th scope="col">Chapter</th>
-              <th scope="col">No. of questions</th>
-              <th scope="col" class="text-center">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for quiz in quizzes %}
-            <tr>
-              <th scope="row">{{loop.index}}</th>
-              <td >{{quiz.name}}</td>
-              <td >{{quiz.date_of_quiz}}</td>
-              <td >{{quiz.time_duration}}</td>
-              <td >{{quiz.chapter.subject.name}}</td>
-              <td >{{quiz.chapter.name}}</td>
-              <td>{{quiz.questions | length}}</td>
-              <td><a href="#" type="button" class="btn btn-success">Start</a>
-              {% endfor %}
-            </tr>
-          </tbody>
-        </table>
-        
-      </table>
     </div>
-    <hr />
+    <div class="mb-3 center">
+      <button type="submit" class="btn btn-primary">Submit</button>
+    </div>
+      </form>
+    </div>
   </div>
 </body>
-</html>
