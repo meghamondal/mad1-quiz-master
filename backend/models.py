@@ -15,7 +15,7 @@ class User(db.Model):
   __tablename__="user"
   user_id=db.Column(db.Integer, primary_key=True)
   email=db.Column(db.String, db.ForeignKey("auth.email"), unique=True, nullable=False)
-  f_name=db.Column(db.String, nullable=False) # make 2 variables f_name
+  f_name=db.Column(db.String, nullable=False) 
   l_name=db.Column(db.String, nullable=False) 
   qualification=db.Column(db.String)
   dob=db.Column(db.DateTime, nullable=False)

@@ -4,8 +4,10 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  <link href="/static/style/admin_dashboard.css" rel="stylesheet">
-  <title>Admin Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+  <script src="https://unpkg.com/ionicons@latest/dist/ionicons.js"></script>
+  <link href="/static/style/user_dashboard.css" rel="stylesheet">
+  <title>User Dashboard</title>
 </head>
 <body>
 
@@ -14,26 +16,27 @@
 
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">Admin Dashboard</a>
+        <a class="navbar-brand" href="#">User Dashboard</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/admin_dashboard/{{name}}">Home</a>
+              <a class="nav-link active" aria-current="page" href="/user_dashboard/{{name}}">Home</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/explore_subject/{{name}}">Subjects</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/score/{{name}}">Scores</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">Summary</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/admin_user/{{name}}">Customer Details</a>
-            </li>
-            <li class="nav-item">
               <a class="nav-link" onclick="window.location.href='/'">Logout</a>
             </li>
-            
-            
           </ul>
           <form class="d-flex" role="search" method="POST" action="">
             <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
@@ -45,34 +48,43 @@
         </div>
       </div>
     </nav>
+    <h3>Quiz Scores</h3>
     
     <div class="container new-container">
-      <div class="title">{{quiz.name}}</div>
+      
       <table class="table table-striped">
         <table class="table">
           <thead>
             <tr>
-              <th scope="col">ID</th>
-              <th scope="col">Question Title</th>
-              <th scope="col" class="text-center">Action</th>
+              <th scope="col">Sl No.</th>
+              <th scope="col">Quiz Name</th>
+              <th scope="col">No. of questions</th>
+              <th scope="col">Date & Time </th>
+              <th scope="col">Duration</th>
+              <th scope="col">Subject</th>
+              <th scope="col">Chapter</th>
+              <th scope="col">Score</th>
             </tr>
           </thead>
           <tbody>
-            {% for question in questions %}
+            {% for score in scores %}
             <tr>
-              <th scope="row">{{question.ques_id}}</th>
-              <td id="clickable"><a onclick="window.location.href='/admin_dashboard/{{quiz.chapter.subject.sub_id}}/{{quiz.chapter.ch_id}}/{{quiz.q_id}}/{{question.ques_id}}/{{name}}'">{{question.q_title}}</a></td>
-              <td><a onclick="window.location.href='/admin_dashboard/{{subject.sub_id}}/{{chapter.ch_id}}/{{quiz.q_id}}/{{question.ques_id}}/edit_question/{{name}}'" type="button" class="btn btn-primary">Edit</a>
-              <a onclick="window.location.href='/admin_dashboard/{{subject.sub_id}}/{{chapter.ch_id}}/{{quiz.q_id}}/{{question.ques_id}}/delete_question/{{name}}'" type="button" class="btn btn-danger">Delete</a></td>
+              <th scope="row">{{loop.index}}</th>
+              <td >{{score.quiz.name}}</td>
+              <td>{{score.quiz.questions | length}}</td>
+              <td >{{score.timestamp_of_attempt}}</td>
+              <td >{{score.quiz.time_duration}}</td>
+              <td >{{score.quiz.chapter.subject.name}}</td>
+              <td >{{score.quiz.chapter.name}}</td>
+              <td >{{score.total_scored}}</td>
               {% endfor %}
             </tr>
           </tbody>
-          <table>
-            <a  type="button" class="btn btn-outline-primary" onclick="window.location.href='/admin_dashboard/{{chapter.subject.sub_id}}/{{chapter.ch_id}}/{{quiz.q_id}}/new_question/{{name}}'">+New Question</a>
-
-          </table>
+        </table>
+        
+      </table>
     </div>
- 
+    <hr />
+  </div>
   </div>
 </body>
-</html>

@@ -29,7 +29,7 @@
               <a class="nav-link" href="/explore_subject/{{name}}">Subjects</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Scores</a>
+              <a class="nav-link" href="/score/{{name}}">Scores</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">Summary</a>
@@ -76,7 +76,7 @@
               <td >{{quiz.chapter.subject.name}}</td>
               <td >{{quiz.chapter.name}}</td>
               <td>{{quiz.questions | length}}</td>
-              <td><a href="#" type="button" class="btn btn-success">Start</a>
+              <td><a href="/attempt_quiz/{{quiz.q_id}}/{{name}}" type="button" class="btn btn-success">Start</a>
               {% endfor %}
             </tr>
           </tbody>

@@ -333,7 +333,7 @@ def delete_question(subject_id, chapter_id, quiz_id, question_id, name):
 @app.route('/user_dashboard/<name>', methods=["GET","POST"])
 def user_dashboard(name):
   if request.method=="GET":
-    quizzes = db.session.query(Quiz).order_by((Quiz.date_of_quiz)).all() #check for reverse flag
+    quizzes = db.session.query(Quiz).order_by((Quiz.date_of_quiz)).all()
     for quiz in  quizzes:
       questions = db.session.query(Question).filter(Question.quiz_id == quiz.q_id).all()
       quiz.questions = questions
@@ -376,4 +376,17 @@ def mainquiz(quiz_id, name):
     new_score = Scores(quiz_id=int(quiz_id), user_id=user.user_id, timestamp_of_attempt=datetime.now(), total_scored=score)
     db.session.add(new_score)
     db.session.commit()
-    return redirect('/quiz_submited/'+str(quiz_id)+"/"+str(name))
+    return redirect(url_for(quiz_score))
+  
+@app.route('/score/<string:name>', methods=['GET','POST']) 
+def quiz_score(name):
+  if request.method=="GET":
+    user = db.session.query(User).filter(User.email == name).first()
+    scores = db.session.query(Scores).filter(Scores.user_id == user.user_id).order_by(Scores.timestamp_of_attempt).all()
+    return render_template("quiz_score.html", scores=scores, name=name)
+  
+@app.route('/admin_user/<string:name>', methods=['GET', 'POST'])
+def admin_user(name):
+  if request.method=="GET":
+     users=db.session.query(User).all()
+     return render_template("admin_user.html", users=users, name=name)
