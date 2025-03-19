@@ -376,7 +376,7 @@ def mainquiz(quiz_id, name):
     new_score = Scores(quiz_id=int(quiz_id), user_id=user.user_id, timestamp_of_attempt=datetime.now(), total_scored=score)
     db.session.add(new_score)
     db.session.commit()
-    return redirect(url_for(quiz_score))
+    return redirect('/score/' + name)
   
 @app.route('/score/<string:name>', methods=['GET','POST']) 
 def quiz_score(name):
@@ -384,9 +384,45 @@ def quiz_score(name):
     user = db.session.query(User).filter(User.email == name).first()
     scores = db.session.query(Scores).filter(Scores.user_id == user.user_id).order_by(Scores.timestamp_of_attempt).all()
     return render_template("quiz_score.html", scores=scores, name=name)
-  
+
+#customer details 
 @app.route('/admin_user/<string:name>', methods=['GET', 'POST'])
 def admin_user(name):
   if request.method=="GET":
      users=db.session.query(User).all()
      return render_template("admin_user.html", users=users, name=name)
+  
+################################################ Search ###############################################################################
+@app.route("/search/<name>", methods=['GET','POST'])
+def admin_search(name):
+  if request.method=="POST":
+    search = request.form.get("search")
+    by_subject = search_by_subject(search)
+    by_name = search_by_name(search)
+    by_chapter = search_by_chapter(search)
+    by_quiz = search_by_quiz(search)
+    if by_subject:
+      return render_template("admin_dashboard.html", name=name, subjects=by_subject)
+    elif by_name:
+      return render_template("admin_user.html", name=name, users=by_name)
+    elif by_chapter:
+      return render_template("admin_dashboard.html", name=name, chapters=by_chapter)
+    elif by_quiz:
+      return render_template("quizzes_page.html", name=name, quizzes=by_quiz, chapter=chapter, subject=subject)
+  return redirect('/admin_dashboard/'+"/"+str(name))
+
+#supported functions
+def search_by_subject(search):
+  subjects = Subject.query.filter(Subject.name.ilike(f"%{search}%")).all()
+  return subjects
+
+def search_by_name(search):
+  users = User.query.filter(User.email.ilike(f"%{search}%")).all()
+  return users
+
+def search_by_chapter(search):
+  chapters = db.session.query(Chapter).filter(Chapter.name.ilike(f"%{search}%")).all()
+  return chapters
+def search_by_quiz(search):
+  quizzes = Quiz.query.filter(Quiz.name.ilike(f"%{search}%")).all()
+  return quizzes
