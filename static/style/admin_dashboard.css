@@ -28,3 +28,22 @@
 li a {
   cursor: pointer;
 }
+
+.flex-container {
+  display: flex;
+  background-color: rgb(130, 233, 245);
+  padding: 2rem;
+
+}
+
+.flex-container > div {
+  margin: 1rem;
+}
+
+img {
+  height: auto;
+  width: 100%;
+  border-radius: 8px;
+  max-width: 500px;
+  margin-top: 1rem;
+}

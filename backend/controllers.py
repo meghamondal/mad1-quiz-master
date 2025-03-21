@@ -2,7 +2,9 @@ from flask import Flask, render_template, request, redirect, url_for
 from .models import *
 from flask import current_app as app
 from datetime import datetime
-
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
 
 
 
@@ -322,6 +324,69 @@ def delete_question(subject_id, chapter_id, quiz_id, question_id, name):
     return render_template('delete_question.html',subject=subject, chapter=chapter,question=question, quiz=quiz, name=name)
   
 
+#admin_summary
+@app.route("/admin_summary")
+def admin_summary():
+
+  plot = subjectwise_top_score()
+  plot.savefig("./static/style/images/subjectwise_top_score.jpeg", dpi=300, bbox_inches='tight')
+  plot.clf()
+
+  pie_plot = subjectwise_user_attempts()
+  pie_plot.savefig("./static/style/images/subjectwise_user_attempts.jpeg", dpi=300, bbox_inches='tight')
+  pie_plot.clf()
+
+  return render_template("admin_summary.html")
+#bar chart
+def subjectwise_top_score():
+  scores = db.session.query(Scores).all()
+  print(scores)
+  top_scores_dict = {}
+  for score in scores:
+    print(score.total_scored)
+    score.subject = score.quiz.chapter.subject
+    if score.subject.name in top_scores_dict.keys():
+      if top_scores_dict[score.subject.name] < score.total_scored:
+        top_scores_dict[score.subject.name] = score.total_scored
+    else:
+      top_scores_dict[score.subject.name] = score.total_scored
+
+  x_names=list(top_scores_dict.keys())
+  print(x_names)
+  y_top_scores=list(top_scores_dict.values())
+  print(y_top_scores)
+  plt.figure(figsize=(20, 10))
+  plt.bar(x_names,y_top_scores,color="blue", width=0.4)
+  plt.title("Subjects/Top Scores", fontsize=40)
+  plt.xlabel("Subjects", fontsize=35)
+  plt.ylabel("Top Scores", fontsize=35)
+  plt.xticks(fontsize=35, rotation=10)
+  plt.yticks(fontsize=35)
+  return plt
+
+#pie chart  
+def subjectwise_user_attempts():
+  scores = db.session.query(Scores).all()
+  user_attemps_dict = {}
+  for score in scores:
+    score.subject = score.quiz.chapter.subject
+    if score.subject.name in user_attemps_dict.keys():
+      user_attemps_dict[score.subject.name] += 1
+    else:
+      user_attemps_dict[score.subject.name] = 1
+
+  labels = list(user_attemps_dict.keys())
+  sizes = list(user_attemps_dict.values())
+
+  plt.figure(figsize=(8,8))
+  plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, colors=['red', 'green', 'blue', 'orange', 'yellow'])
+  plt.title('Subjectwise user attempts', fontsize=16)
+  return plt
+
+  
+
+    
+
 
 
 
@@ -426,3 +491,4 @@ def search_by_chapter(search):
 def search_by_quiz(search):
   quizzes = Quiz.query.filter(Quiz.name.ilike(f"%{search}%")).all()
   return quizzes
+
