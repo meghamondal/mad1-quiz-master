@@ -6,7 +6,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
   <script src="https://unpkg.com/ionicons@latest/dist/ionicons.js"></script>
-  <link href="/static/style/user_dashboard.css" rel="stylesheet">
+  <link href="/static/style/admin_dashboard.css" rel="stylesheet">
   <title>User Dashboard</title>
 </head>
 <body>
@@ -32,14 +32,14 @@
               <a class="nav-link" href="/score/{{name}}">Scores</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/user_summary/{{name}}">Summary</a>
+              <a class="nav-link" href="#">Summary</a>
             </li>
             <li class="nav-item">
               <a class="nav-link" onclick="window.location.href='/'">Logout</a>
             </li>
           </ul>
-          <form class="d-flex" role="search" method="POST" action="/user_search/{{name}}">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search" id="search">
+          <form class="d-flex" role="search" method="POST" action="">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
             <button class="btn btn-outline-success" type="submit">Search</button>
           </form>
           <span class="nav=text">
@@ -48,43 +48,22 @@
         </div>
       </div>
     </nav>
-    <h3>Upcoming Quizzes</h3>
-    
-    <div class="container new-container">
-      
-      <table class="table table-striped">
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">Sl No.</th>
-              <th scope="col">Quiz Name</th>
-              <th scope="col">Date & Time </th>
-              <th scope="col">Duration</th>
-              <th scope="col">Subject</th>
-              <th scope="col">Chapter</th>
-              <th scope="col">No. of questions</th>
-              <th scope="col" class="text-center">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for quiz in quizzes %}
-            <tr>
-              <th scope="row">{{loop.index}}</th>
-              <td >{{quiz.name}}</td>
-              <td >{{quiz.date_of_quiz}}</td>
-              <td >{{quiz.time_duration}}</td>
-              <td >{{quiz.chapter.subject.name}}</td>
-              <td >{{quiz.chapter.name}}</td>
-              <td>{{quiz.questions | length}}</td>
-              <td><a href="/attempt_quiz/{{quiz.q_id}}/{{name}}" type="button" class="btn btn-success">Start</a>
-              {% endfor %}
-            </tr>
-          </tbody>
-        </table>
-        
-      </table>
+    <div class="flex-container">
+      <div class="card" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="title">Summary</h5>
+          <h6 class="card-subtitle mb-2 text-body-secondary">Subjects/No. of Quizzes Attempted</h6>
+          <img src="{{ url_for('static', filename='style/images/subjectwise_quiz_attempts.jpeg') }}" width="500" height="400" alt="Bar Chart">
+        </div>
+      </div>
+      <div class="card" style="width: 18rem;">
+        <div class="card-body">
+          <h5 class="title">Summary</h5>
+          <h6 class="card-subtitle mb-2 text-body-secondary">Subjectwise Average Scores</h6>
+          <img src="{{ url_for('static', filename='style/images/subjectwise_average.jpeg') }}" width="200" height="200" alt="Pie Chart">
+        </div>
+      </div>
     </div>
-    <hr />
   </div>
 </body>
 </html>

@@ -325,8 +325,8 @@ def delete_question(subject_id, chapter_id, quiz_id, question_id, name):
   
 
 #admin_summary
-@app.route("/admin_summary")
-def admin_summary():
+@app.route("/admin_summary/<string:name>")
+def admin_summary(name):
 
   plot = subjectwise_top_score()
   plot.savefig("./static/style/images/subjectwise_top_score.jpeg", dpi=300, bbox_inches='tight')
@@ -336,14 +336,13 @@ def admin_summary():
   pie_plot.savefig("./static/style/images/subjectwise_user_attempts.jpeg", dpi=300, bbox_inches='tight')
   pie_plot.clf()
 
-  return render_template("admin_summary.html")
+  return render_template("admin_summary.html", name=name)
 #bar chart
 def subjectwise_top_score():
   scores = db.session.query(Scores).all()
   print(scores)
   top_scores_dict = {}
   for score in scores:
-    print(score.total_scored)
     score.subject = score.quiz.chapter.subject
     if score.subject.name in top_scores_dict.keys():
       if top_scores_dict[score.subject.name] < score.total_scored:
@@ -352,9 +351,7 @@ def subjectwise_top_score():
       top_scores_dict[score.subject.name] = score.total_scored
 
   x_names=list(top_scores_dict.keys())
-  print(x_names)
   y_top_scores=list(top_scores_dict.values())
-  print(y_top_scores)
   plt.figure(figsize=(20, 10))
   plt.bar(x_names,y_top_scores,color="blue", width=0.4)
   plt.title("Subjects/Top Scores", fontsize=40)
@@ -457,6 +454,82 @@ def admin_user(name):
      users=db.session.query(User).all()
      return render_template("admin_user.html", users=users, name=name)
   
+
+#user_summary
+@app.route("/user_summary/<string:name>")
+def user_summary(name):
+
+  plot = subjectwise_quiz_attempts(name)
+  plot.savefig("./static/style/images/subjectwise_quiz_attempts.jpeg", dpi=300, bbox_inches='tight')
+  plot.clf()
+
+  pie_plot = subjectwise_average(name)
+  pie_plot.savefig("./static/style/images/subjectwise_average.jpeg", dpi=300, bbox_inches='tight')
+  pie_plot.clf()
+
+
+
+
+  return render_template("user_summary.html", name=name)
+
+#bar chart
+def subjectwise_quiz_attempts(name):
+  user = User.query.filter_by(email=name).first()
+  if not user :
+    return plt
+  attempts = db.session.query(Scores).filter(Scores.user_id == user.user_id).all()
+  sub_attempts = {}
+  for attempt in attempts:
+    subject = attempt.quiz.chapter.subject
+    if subject.name in sub_attempts.keys():
+      sub_attempts[subject.name] += 1
+    else:
+      sub_attempts[subject.name] = 1
+
+  x_names = list(sub_attempts.keys())
+  y_counts = list(sub_attempts.values())
+
+  plt.figure(figsize=(20, 10))
+  plt.bar(x_names, y_counts, color='blue', width=0.4)
+  plt.title("Subjectwise number of quizzes attempts", fontsize=40)
+  plt.xlabel("Subjects", fontsize=35)
+  plt.ylabel("No. of Quizzes Attempted", fontsize=35)
+  plt.xticks(fontsize=35, rotation=10)
+  plt.yticks(fontsize=35)
+  return plt
+
+#pie chart
+def subjectwise_average(name):
+  user = User.query.filter_by(email=name).first()
+  if not user :
+    return plt
+  attempts = db.session.query(Scores).filter(Scores.user_id == user.user_id).all()
+  sub_scores = {}
+  sub_attempts = {}
+
+  for attempt in attempts:
+    subject = attempt.quiz.chapter.subject.name
+    if subject not in sub_scores:
+      sub_scores[subject] = 0
+      sub_attempts[subject] = 0
+    sub_scores[subject] += attempt.total_scored
+    sub_attempts[subject] +=1
+  average_scores = {}
+  for sub in sub_scores:
+    average_scores[sub] = sub_scores[subject]/sub_attempts[sub]
+
+  labels = list(average_scores.keys())
+  sizes = list(average_scores.values())
+
+  plt.figure(figsize=(8,8))
+  plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, colors=['red', 'green', 'yellow', 'orange', 'violet'])
+  plt.title('Subjectwise Average Scores', fontsize=16)
+  return plt
+
+    
+
+
+  
 ################################################ Search ###############################################################################
 @app.route("/search/<name>", methods=['GET','POST'])
 def admin_search(name):
@@ -473,7 +546,7 @@ def admin_search(name):
     elif by_chapter:
       return render_template("admin_dashboard.html", name=name, chapters=by_chapter)
     elif by_quiz:
-      return render_template("quizzes_page.html", name=name, quizzes=by_quiz, chapter=chapter, subject=subject)
+      return render_template("quiz_search.html", name=name, quizzes=by_quiz)
   return redirect('/admin_dashboard/'+"/"+str(name))
 
 #supported functions
@@ -492,3 +565,23 @@ def search_by_quiz(search):
   quizzes = Quiz.query.filter(Quiz.name.ilike(f"%{search}%")).all()
   return quizzes
 
+#@app.route("/user_search/<name>", methods=['GET','POST'])
+#def user_search(name):
+  #if request.method=="POST":
+    #search = request.form.get("search")
+    #by_subject = user_search_by_subject(search)
+    ## by_chapter = user_search_by_chapter(search)
+    # by_quiz = user_search_by_quiz(search)
+    #if by_subject:
+      #return render_template("user_dashboard.html", name=name, quizzes=by_subject)
+
+    # elif by_chapter:
+    #   return render_template("user_dashboard.html", name=name, quizzes=by_chapter)
+    # elif by_quiz:
+    #   return render_template("user_dashboard.html", name=name, quizzes=by_quiz)
+  #return redirect('/user_dashboard/'+"/"+str(name))
+
+## Supporting function for user dashboard
+#def user_search_by_subject(search):
+  #quizzes = Quiz.query.filter(Quiz.chapter.subject.name.ilike(f"%{search}%")).all()
+  #return quizzes

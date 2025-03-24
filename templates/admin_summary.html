@@ -52,14 +52,14 @@
         <div class="card-body">
           <h5 class="title">Summary</h5>
           <h6 class="card-subtitle mb-2 text-body-secondary">Subjects/Top Scores</h6>
-          <img src="./static/style/images/subjectwise_top_score.jpeg" twidth="200" height="200" alt="Bar Chart">
+          <img src="{{ url_for('static', filename='style/images/subjectwise_top_score.jpeg') }}" width="200" height="200" alt="Bar Chart">
         </div>
       </div>
       <div class="card" style="width: 18rem;">
         <div class="card-body">
           <h5 class="title">Summary</h5>
           <h6 class="card-subtitle mb-2 text-body-secondary">Subjectwise user attempts</h6>
-          <img src="./static/style/images/subjectwise_user_attempts.jpeg" width="200" height="200" alt="[Pie Chart]">
+          <img src="{{ url_for('static', filename='style/images/subjectwise_user_attempts.jpeg') }}" width="200" height="200" alt="Pie Chart">
         </div>
       </div>
     </div>
