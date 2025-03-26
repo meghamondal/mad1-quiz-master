@@ -168,9 +168,9 @@ def new_chapter(subject_id, name):
 def edit_subject(subject_id,name):
   if request.method=='POST':
     subject = db.session.query(Subject).filter(Subject.sub_id == subject_id).first()
-    name=request.form.get("name")
+    sub_name=request.form.get("name")
     description=request.form.get("description")
-    subject.name=name 
+    subject.name=sub_name 
     subject.description=description
     db.session.commit()
     return redirect('/admin_dashboard/'+"/"+str(name))
@@ -199,10 +199,10 @@ def edit_chapter(subject_id, chapter_id, name):
   if request.method=='POST':
     subject = db.session.query(Subject).filter(Subject.sub_id == subject_id).first()
     chapter = db.session.query(Chapter).filter(Chapter.ch_id == chapter_id).first()
-    name=request.form.get("name")
+    ch_name=request.form.get("name")
     description=request.form.get("description")
-    subject.name=name 
-    subject.description=description
+    chapter.name=ch_name 
+    chapter.description=description
     db.session.commit()
     return redirect('/admin_dashboard/'+"/"+str(name))
   
@@ -531,20 +531,19 @@ def subjectwise_average(name):
 
   
 ################################################ Search ###############################################################################
+
+#admin_search
 @app.route("/search/<name>", methods=['GET','POST'])
 def admin_search(name):
   if request.method=="POST":
     search = request.form.get("search")
     by_subject = search_by_subject(search)
     by_name = search_by_name(search)
-    by_chapter = search_by_chapter(search)
     by_quiz = search_by_quiz(search)
     if by_subject:
       return render_template("admin_dashboard.html", name=name, subjects=by_subject)
     elif by_name:
       return render_template("admin_user.html", name=name, users=by_name)
-    elif by_chapter:
-      return render_template("admin_dashboard.html", name=name, chapters=by_chapter)
     elif by_quiz:
       return render_template("quiz_search.html", name=name, quizzes=by_quiz)
   return redirect('/admin_dashboard/'+"/"+str(name))
@@ -558,30 +557,39 @@ def search_by_name(search):
   users = User.query.filter(User.email.ilike(f"%{search}%")).all()
   return users
 
-def search_by_chapter(search):
-  chapters = db.session.query(Chapter).filter(Chapter.name.ilike(f"%{search}%")).all()
-  return chapters
+
 def search_by_quiz(search):
   quizzes = Quiz.query.filter(Quiz.name.ilike(f"%{search}%")).all()
   return quizzes
 
-#@app.route("/user_search/<name>", methods=['GET','POST'])
-#def user_search(name):
-  #if request.method=="POST":
-    #search = request.form.get("search")
-    #by_subject = user_search_by_subject(search)
-    ## by_chapter = user_search_by_chapter(search)
-    # by_quiz = user_search_by_quiz(search)
-    #if by_subject:
-      #return render_template("user_dashboard.html", name=name, quizzes=by_subject)
+#user_search
+@app.route("/user_search/<name>", methods=['GET','POST'])
+def user_search(name):
+  if request.method=="POST":
+    search = request.form.get("search")
+    by_subject = user_search_by_subject(search)
+    by_chapter = user_search_by_chapter(search)
+    by_quiz = user_search_by_quiz(search)
+    if by_subject:
+      return render_template("user_dashboard.html", name=name, quizzes=by_subject)
+    elif by_chapter:
+      return render_template("user_dashboard.html", name=name, quizzes=by_chapter)
+    elif by_quiz:
+      return render_template("user_dashboard.html", name=name, quizzes=by_quiz)
+  return redirect('/user_dashboard/'+"/"+str(name))
 
-    # elif by_chapter:
-    #   return render_template("user_dashboard.html", name=name, quizzes=by_chapter)
-    # elif by_quiz:
-    #   return render_template("user_dashboard.html", name=name, quizzes=by_quiz)
-  #return redirect('/user_dashboard/'+"/"+str(name))
+##Supporting function for user dashboard
+def user_search_by_subject(search):
+  subjects = db.session.query(Subject.sub_id).filter(Subject.name.ilike(f"%{search}%"))
+  chapters = db.session.query(Chapter.ch_id).filter(Chapter.subject_id.in_(subjects))
+  quizzes = Quiz.query.filter(Quiz.chapter_id.in_(chapters)).all()
+  return quizzes
 
-## Supporting function for user dashboard
-#def user_search_by_subject(search):
-  #quizzes = Quiz.query.filter(Quiz.chapter.subject.name.ilike(f"%{search}%")).all()
-  #return quizzes
+def user_search_by_chapter(search):
+  chapters = db.session.query(Chapter.ch_id).filter(Chapter.name.ilike(f"%{search}%"))
+  quizzes = Quiz.query.filter(Quiz.chapter_id.in_(chapters)).all()
+  return quizzes
+
+def user_search_by_quiz(search):
+  quizzes = Quiz.query.filter(Quiz.name.ilike(f"%{search}%")).all()
+  return quizzes
