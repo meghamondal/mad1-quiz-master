@@ -136,9 +136,9 @@ def new_question(subject_id, chapter_id, quiz_id, name):
 @app.route("/admin_dashboard/new_subject/<string:name>", methods=['GET','POST'])
 def new_subject(name):
   if request.method=='POST':
-    name=request.form.get("name")
+    sub_name=request.form.get("name")
     description=request.form.get("description")
-    new_subject=Subject(name=name, description=description)
+    new_subject=Subject(name=sub_name, description=description)
     db.session.add(new_subject)
     db.session.commit()
     return redirect('/admin_dashboard/'+"/"+str(name))

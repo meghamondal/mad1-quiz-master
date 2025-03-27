@@ -38,8 +38,8 @@
               <a class="nav-link" onclick="window.location.href='/'">Logout</a>
             </li>
           </ul>
-          <form class="d-flex" role="search" method="POST" action="">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+          <form class="d-flex" role="search" method="POST" action="/user_search/{{name}}">
+            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search" name="search" id="search">
             <button class="btn btn-outline-success" type="submit">Search</button>
           </form>
           <span class="nav=text">
