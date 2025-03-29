@@ -67,7 +67,7 @@
           <tbody>
             {% for chapter in subject.chapters %}
             <tr>
-              <th scope="row">{{chapter.ch_id}}</th>
+              <th scope="row">{{loop.index}}</th> 
               <td id="clickable"><a onclick="window.location.href='/admin_dashboard/{{subject.sub_id}}/{{chapter.ch_id}}/{{name}}'">{{chapter.name}}</a></td>
               <td>{{chapter.quizes | length}}</td>
               <td><a onclick="window.location.href='/admin_dashboard/{{subject.sub_id}}/{{chapter.ch_id}}/edit_chapter/{{name}}'" type="button" class="btn btn-primary">Edit</a>

@@ -7,6 +7,7 @@
   <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
   <script src="https://unpkg.com/ionicons@latest/dist/ionicons.js"></script>
   <link href="/static/style/admin_dashboard.css" rel="stylesheet">
+  <link href="/static/style/summary.css" rel="stylesheet">
   <title>User Dashboard</title>
 </head>
 <body>
@@ -49,18 +50,18 @@
       </div>
     </nav>
     <div class="flex-container">
-      <div class="card" style="width: 18rem;">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="title">Summary</h5>
+          <h6 class="card-subtitle mb-2 text-body-secondary">Subject/Average Scores</h6>
+          <img src="{{ url_for('static', filename='style/images/subjectwise_average.jpeg') }}" width="200" height="200" alt="Bar Chart">
+        </div>
+      </div>
+      <div class="card">
         <div class="card-body">
           <h5 class="title">Summary</h5>
           <h6 class="card-subtitle mb-2 text-body-secondary">Subjects/No. of Quizzes Attempted</h6>
-          <img src="{{ url_for('static', filename='style/images/subjectwise_quiz_attempts.jpeg') }}" width="500" height="400" alt="Bar Chart">
-        </div>
-      </div>
-      <div class="card" style="width: 18rem;">
-        <div class="card-body">
-          <h5 class="title">Summary</h5>
-          <h6 class="card-subtitle mb-2 text-body-secondary">Subjectwise Average Scores</h6>
-          <img src="{{ url_for('static', filename='style/images/subjectwise_average.jpeg') }}" width="200" height="200" alt="Pie Chart">
+          <img src="{{ url_for('static', filename='style/images/subjectwise_quiz_attempts.jpeg') }}" width="500" height="400" alt="Pie chart">
         </div>
       </div>
     </div>

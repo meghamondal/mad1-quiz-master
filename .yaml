@@ -1,0 +1,863 @@
+openapi: 3.0.0
+info:
+  title: Quiz Master api
+  version: 1.0.0
+  description: API for user authentication
+
+servers:
+  - url: http://127.0.0.1:8080
+
+paths:
+  /api/login:
+    description: End poiunt for login
+  post:
+   description: Authenticates a user with email and password.
+   requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  example: "ram@example.com"
+                password:
+                 type: string
+                 example: "ram12"
+   responses:
+        '200':
+          description: Login Successful
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User logged in successfully."
+        '400':
+          description: Invalid Credentials provided
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Check your credentials..."
+        '500':
+          description: Internal Server Error
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Internal Server Error"
+  /api/register:
+    description: End point for registration
+  post:
+    description: Registeration
+    requestBody:
+      required: true
+      content:
+        application/json:
+        schema:
+          type: object
+          properties:
+            email:
+              type: string
+              example: "new@example.com"
+            password:
+              type: string
+              example: "new12"
+      responses:
+        '400':
+          description: Email already exists
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  error:
+                    type: string
+                    example: "Email already exists."
+          '201':
+            description: Registration Successful
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+                      example: "Registration successfully."
+          '500':
+            description: Internal Server Error
+            
+
+  /api/edit_user/<int:user_id>:
+    description: End point to update user
+    put:
+      description: Operation for editing user.
+      parameters:
+        - in: path
+          name: user_id
+          required: true
+          schema:
+           type: integer
+           example: 2
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: 
+                  type: string
+                  example: "updatedram@example.com"
+                f_name:
+                  type: string
+                  example: "Ram"
+                l_name:
+                  type: string
+                  example: "Kumar"
+                qualification:
+                  type: string
+                  example: "10th Standard"
+                dob:
+                  type: string
+                  format: date
+                  example: "2008-10-16"           
+      responses:
+        '200':
+          description: "Successfully updated"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "User updated"
+                  user_id:
+                    type: integer
+                    example: 1
+                  name:
+                    type: string
+                    example: "updatedram@example.com"
+                  f_name:
+                    type: string
+                    example: "Ram"
+                  l_name:
+                    type: string
+                    example: "Kumar"
+                  qualification:
+                    type: string
+                    example: "10th Standard"
+                  dob:
+                    type: string
+                    format: date
+                    example: "2008-10-16" 
+        '500':
+            description: Internal Server Error
+            
+
+  /api/delete_user/<int:user_id>:
+    description: End point to delete user
+  delete:
+    description: Operation for deleting user
+    parameters:
+      - in: path
+        name: user_id
+        required: true
+        schema:
+          type: integer
+          example: 2
+    responses:
+        '200':
+          description: User deleted successfully
+        '500':
+            description: Internal Server Error
+            
+  
+  /api/get_subjects:
+    description: End point to read subject
+  get:
+    description: Operation to read subjects
+    responses:
+    '200':
+    description: Request successful
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "Data read successfully."
+      '500':
+      description: Internal Server Error
+
+  /api/new_subject:
+  description: End point for new subject
+  post:
+    description: New subject
+    requestBody:
+      required: true
+      content:
+        application/json:
+        schema:
+          type: object
+          properties:
+            name:
+              type: string
+              example: "Physics"
+            description:
+              type: string
+              example: "This is a physics subject."
+      responses:
+        '201':
+          description: New subject added
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+                    example: "New subject added successfully."
+        '500':
+          description: Internal Server Error
+
+  /api/edit_subject/<int:subject_id>:
+    description: End point to update subject
+  put:
+    description: Operation for editing subject.
+    parameters:
+      - in: path
+        name: subject_id
+        required: true
+        schema:
+          type: integer
+          example: 2
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name: 
+                type: string
+                example: "physics"
+              description:
+                type: string
+                example: "The name of this subject is physics"          
+    responses:
+      '200':
+        description: "Successfully updated"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "Subject updated"
+                subject_id:
+                  type: integer
+                  example: 2
+                name:
+                  type: string
+                  example: "physics"
+                description:
+                  type: string
+                  example: "The name of this subject is physics"
+      '500':
+        description: Internal Server Error
+
+  /api/delete_subject/<int:subject_id>:
+    description: End point delete subject
+  delete:
+    description: Operation for deleting subject
+    parameters:
+        - in: path
+          name: subject_id
+          required: true
+          schema:
+           type: integer
+           example: 2
+    responses:
+        '200':
+          description: Subject deleted successfully
+        '500':
+            description: Internal Server Error
+
+  /api/get_chapters:
+    description: End point to read chapters
+  get:
+    description: Operation to read chaspters
+    responses:
+    '200':
+    description: Request successful
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "Data read successfully."
+      '500':
+      description: Internal Server Error
+    
+  /api/new_chapter/<int:subject_id>:
+    description: End point to add new chapter
+  post:
+    description: Operation for adding new chapter
+    parameters:
+      - in: path
+        name: subject_id
+        required: true
+        schema:
+          type: integer
+          example: 2
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name: 
+                type: string
+                example: "light"
+              description:
+                type: string
+                example: "The name of this chapter is light" 
+    responses:
+      '201':
+        description: New chapter added
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "New chapter added successfully."
+                subject_id:
+                  type: integer
+                  example: 2
+      '500':
+        description: Internal Server Error
+
+  /api/edit_chapter/<int:subject_id>/<int:chapter_id>:
+    description: End point to edit chapter
+  put:
+    description: Operation for editing chapter
+    parameters:
+      - in: path
+        name: subject_id
+        required: true
+        schema:
+          type: integer
+          example: 2
+      - in: path
+        name: chapter_id
+        required: true
+        schema:
+          type: integer
+          example: 2
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name: 
+                type: string
+                example: "light"
+              description:
+                type: string
+                example: "The name of this chapter is light"          
+    responses:
+      '200':
+        description: "Successfully updated"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "chapter updated"
+                subject_id:
+                  type: integer
+                  example: 2
+                chapter_id:
+                  type: integer
+                  example: 2
+                name:
+                  type: string
+                  example: "light"
+                description:
+                  type: string
+                  example: "The name of this chapter is light"
+      '500':
+        description: Internal Server Error
+  /api/delete_chapter/<int:subject_id>/<int:chapter_id>:
+    description: End point to delete chapter
+  delete:
+    description: Operation for deleting a chapter      
+    parameters:
+      - in: path
+        name: subject_id
+        required: true
+        schema:
+          type: integer
+          example: 2
+      - in: path
+        name: chapter_id
+        required: true
+        schema:
+          type: integer
+          example: 2
+    responses:
+        '200':
+          description: Chapter deleted successfully
+        '500':
+            description: Internal Server Error
+
+  /api/get_quizzes:
+    description: End point to read quiz
+  get:
+    description: Operation to read quizzes
+    responses:
+    '200':
+    description: Request successful
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "Data read successfully."
+      '500':
+      description: Internal Server Error
+  
+  /api/new_quiz/<int:subject_id>/<int:chapter_id>:
+    description: End point to add new quiz
+  post:
+    description: Operation for adding a new quiz
+    parameters:
+      - in: path
+        name: subject_id
+        required: true
+        schema:
+          type: integer
+          example: 2
+      - in: path
+        name: chapter_id
+        required: true
+        schema:
+          type: integer
+          example: 2
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name: 
+                type: string
+                example: "Quiz 1"
+              date of quiz:
+                type: string
+                format: date
+                example: "2025-04-17"
+              time_duration:
+                type: integer
+                example: 60
+              remarks:
+                type: string
+                example: "Quiz 1"
+
+    responses:
+      '201':
+        description: New quiz added
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "New quiz added successfully."
+                subject_id:
+                  type: integer
+                  example: 2
+                chapter_id:
+                  type: integer
+                  example: 2
+      '500':
+        description: Internal Server Error
+  /api/edit_quiz/<int:subject_id>/<int:chapter_id>/<int:quiz_id>:
+    description: End point to edit a quiz
+  put:
+    description: Operation for aediting a quiz
+    parameters:
+      - in: path
+        name: subject_id
+        required: true
+        schema:
+          type: integer
+          example: 2
+      - in: path
+        name: chapter_id
+        required: true
+        schema:
+          type: integer
+          example: 2
+      - in: path
+        name: quiz_id
+        required: true
+        schema:
+          type: integer
+          example: 2
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name: 
+                type: string
+                example: "Quiz 1"
+              date of quiz:
+                type: string
+                format: date
+                example: "2025-04-17"
+              time_duration:
+                type: integer
+                example: 60
+              remarks:
+                type: string
+                example: "Quiz 1"          
+    responses:
+      '200':
+        description: "Successfully updated"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "quiz updated"
+                subject_id:
+                  type: integer
+                  example: 2
+                chapter_id:
+                  type: integer
+                  example: 2
+                quiz_id:
+                  type: integer
+                  example: 2
+                name: 
+                  type: string
+                  example: "Quiz 1"
+                date of quiz:
+                  type: string
+                  format: date
+                  example: "2025-04-17"
+                time_duration:
+                  type: integer
+                  example: 60
+                remarks:
+                  type: string
+                  example: "Quiz 1"
+      '500':
+        description: Internal Server Error
+  /api/delete_quiz/<int:subject_id>/<int:chapter_id>/<int:quiz_id>:
+    description: End point to delete quiz
+  delete:
+    description: Operation for deleting a quiz
+    parameters:
+      - in: path
+        name: subject_id
+        required: true
+        schema:
+          type: integer
+          example: 2
+      - in: path
+        name: chapter_id
+        required: true
+        schema:
+          type: integer
+          example: 2
+      - in: path
+        name: quiz_id
+        required: true
+        schema:
+          type: integer
+          example: 2
+    responses:
+        '200':
+          description: Chapter deleted successfully
+        '500':
+            description: Internal Server Error
+
+  /api/get_questions:
+    description: End point to read questions
+  get:
+    description: Operation to read questions
+    responses:
+    '200':
+    description: Request successful
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "Data read successfully."
+      '500':
+      description: Internal Server Error
+
+  /api/new_question/<int:subject_id>/<int:chapter_id>/<int:quiz_id>:
+    description: End point to add new question
+  put:
+    description: Operation for adding new question
+    parameters:
+      - in: path
+        name: subject_id
+        required: true
+        schema:
+          type: integer
+          example: 2
+      - in: path
+        name: chapter_id
+        required: true
+        schema:
+          type: integer
+          example: 2
+      - in: path
+        name: quiz_id
+        required: true
+        schema:
+          type: integer
+          example: 2
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name: 
+                type: string
+                example: "Q1"
+              statement:
+                type: string
+                example: "What is the unit of charge?"
+              option_1:
+                type: string
+                example: "a) Coulomb"
+              option_2:
+                type: string
+                example: "b) Newton"
+              option_3:
+                type: string
+                example: "c) Joule"
+              option_4:
+                type: string
+                example: "d) Volt"
+              correct_option:
+                type: integer
+                example: 1
+
+    responses:
+      '201':
+        description: New question added
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "New question added successfully."
+                subject_id:
+                  type: integer
+                  example: 2
+                chapter_id:
+                  type: integer
+                  example: 2
+                quiz_id:
+                  type: integer
+                  example: 2
+      '500':
+        description: Internal Server Error
+  
+  /api/edit_question/<int:subject_id>/<int:chapter_id>/<int:quiz_id>/<int:question_id>:
+    description: End point to edit question
+  put:
+    description: Operation for editing question
+    parameters:
+      - in: path
+        name: subject_id
+        required: true
+        schema:
+          type: integer
+          example: 2
+      - in: path
+        name: chapter_id
+        required: true
+        schema:
+          type: integer
+          example: 2
+      - in: path
+        name: quiz_id
+        required: true
+        schema:
+          type: integer
+          example: 2
+      - in: path
+        name: question_id
+        required: true
+        schema:
+          type: integer
+          example: 2
+    requestBody:
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              name: 
+                type: string
+                example: "Q1"
+              statement:
+                type: string
+                example: "What is the unit of charge?"
+              option_1:
+                type: string
+                example: "a) Coulomb"
+              option_2:
+                type: string
+                example: "b) Newton"
+              option_3:
+                type: string
+                example: "c) Joule"
+              option_4:
+                type: string
+                example: "d) Volt"
+              correct_option:
+                type: integer
+                example: 1      
+    responses:
+      '200':
+        description: "Successfully updated"
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+                  example: "question updated"
+                subject_id:
+                  type: integer
+                  example: 2
+                chapter_id:
+                  type: integer
+                  example: 2
+                quiz_id:
+                  type: integer
+                  example: 2
+                question_id:
+                  type: integer
+                  example: 2
+                name: 
+                  type: string
+                  example: "Q1"
+                statement:
+                type: string
+                example: "What is the unit of charge?"
+              option_1:
+                type: string
+                example: "a) Coulomb"
+              option_2:
+                type: string
+                example: "b) Newton"
+              option_3:
+                type: string
+                example: "c) Joule"
+              option_4:
+                type: string
+                example: "d) Volt"
+              correct_option:
+                type: integer
+                example: 1
+      '500':
+        description: Internal Server Error
+
+  /api/delete_question/<int:subject_id>/<int:chapter_id>/<int:quiz_id>/<int:question_id>":
+    description: End point to delete question
+  delete:
+    description: Operation for deleting a question
+    parameters:
+      - in: path
+        name: subject_id
+        required: true
+        schema:
+          type: integer
+          example: 2
+      - in: path
+        name: chapter_id
+        required: true
+        schema:
+          type: integer
+          example: 2
+      - in: path
+        name: quiz_id
+        required: true
+        schema:
+          type: integer
+          example: 2
+      - in: path
+        name: question_id
+        required: true
+        schema:
+          type: integer
+          example: 2
+    responses:
+      '200':
+        description: Question deleted successfully
+      '500':
+          description: Internal Server Error
+
+  /api/get_scores:
+    description: End point to read scores
+  get:
+    description: Operation to read scores
+    responses:
+    '200':
+    description: Request successful
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            message:
+              type: string
+              example: "Data read successfully."
+      '500':
+      description: Internal Server Error
+    
+
+
+        

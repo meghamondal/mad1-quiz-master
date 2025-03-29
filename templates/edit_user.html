@@ -4,14 +4,11 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-  <link href="/static/style/admin_dashboard.css" rel="stylesheet">
-  <title>Admin Dashboard</title>
+ 
+  <title>Edit User</title>
 </head>
 <body>
-
-
-  <div class="container new-container">
-
+  <div class="container main-container">
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">Admin Dashboard</a>
@@ -45,37 +42,33 @@
         </div>
       </div>
     </nav>
-    
-    <div class="container new-container">
-      <div class="title">{{chapter.name}}</div>
-      <div class="description">{{chapter.description}}</div>
-      <table class="table table-striped">
-        <table class="table">
-          <thead>
-            <tr>
-              <th scope="col">ID</th>
-              <th scope="col">Quiz Title</th>
-              <th scope="col">Date</th>
-              <th scope="col" class="text-center">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for quiz in quizzes %}
-            <tr>
-              <th scope="row">{{loop.index}}</th>
-              <td id="clickable"><a onclick="window.location.href='/admin_dashboard/{{quiz.chapter.subject.sub_id}}/{{quiz.chapter.ch_id}}/{{quiz.q_id}}/{{name}}'">{{quiz.name}}</a></td>
-              <td>{{quiz.date_of_quiz_str}}</td>
-              <td><a onclick="window.location.href='/admin_dashboard/{{subject.sub_id}}/{{chapter.ch_id}}/{{quiz.q_id}}/edit_quiz/{{name}}'" type="button" class="btn btn-primary">Edit</a>
-              <a onclick="window.location.href='/admin_dashboard/{{subject.sub_id}}/{{chapter.ch_id}}/{{quiz.q_id}}/delete_quiz/{{name}}'" type="button" class="btn btn-danger">Delete</a></td>
-              {% endfor %}
-            </tr>
-          </tbody>
-          <table>
-            <a  type="button" class="btn btn-outline-primary" onclick="window.location.href='/admin_dashboard/{{chapter.subject.sub_id}}/{{chapter.ch_id}}/new_quiz/{{name}}'">+New Quiz</a>
-
-          </table>
-    </div>
- 
-  </div>
+    <form method="POST" action="/admin_user/{{user.user_id}}/edit_user/{{name}}">
+      <div class="mb-3 center"><h3>Edit User</h3></div>
+      <div class="mb-3">
+        <label for="user_name" class="form-label">Username : </label>
+        <input type="text" class="form-control" id="username" name="username" aria-describedby="username" placeholder="username" value="{{user.email}}" readonly>
+      </div>
+      <div class="mb-3">
+        <label for="f_name" class="form-label">First Name : </label>
+        <input type="text" class="form-control" id="f_name" name="f_name" aria-describedby="FirstName"value="{{user.f_name}}">
+      </div>
+      <div class="mb-3">
+        <label for="l_name" class="form-label">Last Name : </label>
+        <input type="text" class="form-control" id="l_name" name="l_name" aria-describedby="LastName"value="{{user.l_name}}">
+      </div>
+      <div class="mb-3">
+        <label for="qualification" class="form-label">Qualification : </label>
+        <input type="text" class="form-control" id="qualification" name="qualification" aria-describedby="qualification"value="{{user.qualification}}">
+      </div>
+      <div class="mb-3">
+        <label for="dob" class="form-label">Date of Birth : </label>
+        <input type="date" class="form-control" id="dob" name="dob" aria-describedby="dob" value="{{user.dob_str}}">
+      </div>
+      <div class="mb-3 center">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <a onclick="window.location.href='/admin_user/{{name}}'" type="Button" class="btn btn-primary">Cancel</a>
+      </div>
+    </form>
+</div>
 </body>
 </html>

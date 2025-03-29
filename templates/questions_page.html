@@ -60,7 +60,7 @@
           <tbody>
             {% for question in questions %}
             <tr>
-              <th scope="row">{{question.ques_id}}</th>
+              <th scope="row">{{loop.index}}</th>
               <td id="clickable"><a onclick="window.location.href='/admin_dashboard/{{quiz.chapter.subject.sub_id}}/{{quiz.chapter.ch_id}}/{{quiz.q_id}}/{{question.ques_id}}/{{name}}'">{{question.q_title}}</a></td>
               <td><a onclick="window.location.href='/admin_dashboard/{{subject.sub_id}}/{{chapter.ch_id}}/{{quiz.q_id}}/{{question.ques_id}}/edit_question/{{name}}'" type="button" class="btn btn-primary">Edit</a>
               <a onclick="window.location.href='/admin_dashboard/{{subject.sub_id}}/{{chapter.ch_id}}/{{quiz.q_id}}/{{question.ques_id}}/delete_question/{{name}}'" type="button" class="btn btn-danger">Delete</a></td>

@@ -50,6 +50,44 @@ class CommonApi(Resource):
     except:
       return {"error":"Internal Server Error"}, 500
 
+  #Updating data
+  def put(self, user_id):
+    try:
+      user = db.session.query(User).filter(User.user_id == user_id).first()
+      user_name=request.json.get("name")
+      f_name=request.json.get("f_name")
+      l_name=request.json.get("l_name")
+      qualification=request.json.get("qualification")
+      dob=request.json.get("dob")
+      if(dob):
+        dob=datetime.strptime(dob, '%Y-%m-%d')
+      user.name=user_name 
+      user.f_name=f_name
+      user.l_name=l_name
+      user.qualification=qualification
+      user.dob=dob
+      db.session.commit()
+      return {"message" : "User updated successfully..."}, 200
+    except:
+      return {"error":"Internal Server Error"}, 500
+
+  #Deleting data
+  def delete(self, user_id):
+    try:
+      user = db.session.query(User).filter(User.user_id == user_id).first()
+      if user:
+        authen = db.session.query(Authentication).filter(Authentication.email == user.email).first()
+        if authen:
+          db.session.delete(authen)
+      db.session.delete(user)
+      db.session.commit()
+      return {"message" : "User deleted successfully..."}, 200
+    except:
+      return {"error" : "Internal Server Error"}, 500
+
+
+  
+
 class SubjectApi(Resource):
 
   #Reading data
@@ -275,7 +313,7 @@ class ScoresApi(Resource):
       scores_json.append({"id" : score.score_id, "quiz_id" : score.quiz_id, "user_id" : score.user_id, "timestamp_of_attempt" : str(score.timestamp_of_attempt), "total_scored" : score.total_scored})
     return scores_json
 
-api.add_resource(CommonApi, "/api/login", "/api/register")
+api.add_resource(CommonApi, "/api/login", "/api/register", "/api/edit_user/<int:user_id>", "/api/delete_user/<int:user_id>")
 api.add_resource(SubjectApi,"/api/get_subjects", "/api/new_subject", "/api/edit_subject/<int:subject_id>", "/api/delete_subject/<int:subject_id>")
 api.add_resource(ChapterApi,"/api/get_chapters", "/api/new_chapter/<int:subject_id>", "/api/edit_chapter/<int:subject_id>/<int:chapter_id>", "/api/delete_chapter/<int:subject_id>/<int:chapter_id>")
 api.add_resource(QuizApi,"/api/get_quizzes", "/api/new_quiz/<int:subject_id>/<int:chapter_id>", "/api/edit_quiz/<int:subject_id>/<int:chapter_id>/<int:quiz_id>", "/api/delete_quiz/<int:subject_id>/<int:chapter_id>/<int:quiz_id>")

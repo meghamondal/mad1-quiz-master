@@ -61,6 +61,7 @@
               <th scope="col">Last Name</th>
               <th scope="col">Qualification</th>
               <th scope="col">Date of Birth</th>
+              <th scope="col" class="text-center">Action</th>
             </tr>
           </thead>
           <tbody>
@@ -72,6 +73,8 @@
               <td >{{user.l_name}}</td>
               <td >{{user.qualification}}</td>
               <td >{{user.dob}}</td>
+              <td><a onclick="window.location.href='/admin_user/{{user.user_id}}/edit_user/{{name}}'" type="button" class="btn btn-primary">Edit</a>
+              <a onclick="window.location.href='/admin_user/{{user.user_id}}/delete_user/{{name}}'" type="button" class="btn btn-danger">Delete</a></td>
               {% endfor %}
             </tr>
           </tbody>

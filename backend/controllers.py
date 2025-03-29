@@ -7,17 +7,18 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 
-
+#landing page
 @app.route("/")
 def home():
   return render_template("index.html")
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
+#login
+@app.route('/login_after_registration', methods=['GET', 'POST'])
+def login_after_registration():
   if request.method=="GET":
-    return render_template("login.html", msg="")
+    return render_template("login.html", msg="Registration Successful!! Login Now!!")
   if request.method=="POST":
-    name=request.form.get("username")
+    name=request.form.get("email")
     password=request.form.get("password")
     authen=Authentication.query.filter_by(email=name, password=password).first()
     if authen and authen.role=="admin":
@@ -26,6 +27,22 @@ def login():
       return redirect("/user_dashboard/"+name)
     else:
       return render_template("login.html", msg="Invalid credentials...")
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+  if request.method=="GET":
+    return render_template("login.html", msg="")
+  if request.method=="POST":
+    name=request.form.get("email")
+    password=request.form.get("password")
+    authen=Authentication.query.filter_by(email=name, password=password).first()
+    if authen and authen.role=="admin":
+      return redirect("/admin_dashboard/"+name)
+    elif authen and authen.role=="user":
+      return redirect("/user_dashboard/"+name)
+    else:
+      return render_template("login.html", msg="Invalid credentials...")
+  
     
 @app.route('/admin_dashboard/<name>', methods=["GET","POST"])
 def admin_dashboard(name):
@@ -64,7 +81,7 @@ def question_details(subject_id, chapter_id, quiz_id, question_id, name):
 
 
   
-  
+#for registration  
 @app.route("/register", methods=['GET','POST'])
 def register():
   if request.method=='POST':
@@ -85,8 +102,10 @@ def register():
     db.session.add(new_user_auth)
     db.session.add(new_user)
     db.session.commit()
-    return render_template("login.html", msg="Registration successfull, please proceed to login now!")
+    return redirect('/login_after_registration')
   return render_template('register.html', msg="")
+
+
 
 #for new quiz
 @app.route("/admin_dashboard/<int:subject_id>/<int:chapter_id>/new_quiz/<string:name>", methods=['GET','POST'])
@@ -132,7 +151,7 @@ def new_question(subject_id, chapter_id, quiz_id, name):
     
 
 
-#foe new subject
+#for new subject
 @app.route("/admin_dashboard/new_subject/<string:name>", methods=['GET','POST'])
 def new_subject(name):
   if request.method=='POST':
@@ -226,7 +245,7 @@ def delete_chapter(subject_id, chapter_id, name):
     chapter = db.session.query(Chapter).filter(Chapter.ch_id == chapter_id).first()
     return render_template('delete_chapter.html',subject=subject, chapter=chapter, name=name)
   
-#for edit chapter
+#for edit quiz
 @app.route("/admin_dashboard/<int:subject_id>/<int:chapter_id>/<int:quiz_id>/edit_quiz/<string:name>", methods=['GET','POST'])
 def edit_quiz(subject_id, chapter_id, quiz_id, name):
   if request.method=='POST':
@@ -322,6 +341,55 @@ def delete_question(subject_id, chapter_id, quiz_id, question_id, name):
     question = db.session.query(Question).filter(Question.ques_id == question_id).first()
     quiz = db.session.query(Quiz).filter(Quiz.q_id == quiz_id).first()
     return render_template('delete_question.html',subject=subject, chapter=chapter,question=question, quiz=quiz, name=name)
+
+#customer details 
+@app.route('/admin_user/<string:name>', methods=['GET', 'POST'])
+def admin_user(name):
+  if request.method=="GET":
+     users=db.session.query(User).all()
+     return render_template("admin_user.html", users=users, name=name)
+
+#for edit user
+@app.route("/admin_user/<int:user_id>/edit_user/<string:name>", methods=['GET','POST'])
+def edit_user(user_id, name):
+  if request.method=='POST':
+    user = db.session.query(User).filter(User.user_id == user_id).first()
+    user_name=request.form.get("name")
+    f_name=request.form.get("f_name")
+    l_name=request.form.get("l_name")
+    qualification=request.form.get("qualification")
+    dob=request.form.get("dob")
+    if(dob):
+      dob=datetime.strptime(dob, '%Y-%m-%d')
+    user.name=user_name 
+    user.f_name=f_name
+    user.l_name=l_name
+    user.qualification=qualification
+    user.dob=dob
+    db.session.commit()
+    return redirect('/admin_user/'+"/"+str(name))
+  elif(request.method=='GET'):
+    user = db.session.query(User).filter(User.user_id == user_id).first()
+    user.dob_str = datetime.date(user.dob)
+    return render_template('edit_user.html',user=user, name=name)
+
+#for delete user
+@app.route("/admin_user/<int:user_id>/delete_user/<string:name>", methods=['GET','POST'])
+def delete_user(user_id, name):
+  if request.method=='POST':
+    user = db.session.query(User).filter(User.user_id == user_id).first()
+    if user:
+      authen = db.session.query(Authentication).filter(Authentication.email == user.email).first()
+      if authen:
+        db.session.delete(authen)
+    db.session.delete(user)
+    db.session.commit()
+    return redirect('/admin_user/'+"/"+str(name))
+  
+  elif(request.method=='GET'):
+    user = db.session.query(User).filter(User.user_id == user_id).first()
+    user.dob_str = datetime.date(user.dob)
+    return render_template('delete_user.html',user=user, name=name)
   
 
 #admin_summary
@@ -337,7 +405,8 @@ def admin_summary(name):
   pie_plot.clf()
 
   return render_template("admin_summary.html", name=name)
-#bar chart
+
+#bar chart for admin
 def subjectwise_top_score():
   scores = db.session.query(Scores).all()
   print(scores)
@@ -361,7 +430,7 @@ def subjectwise_top_score():
   plt.yticks(fontsize=35)
   return plt
 
-#pie chart  
+#pie chart for admin
 def subjectwise_user_attempts():
   scores = db.session.query(Scores).all()
   user_attemps_dict = {}
@@ -391,37 +460,49 @@ def subjectwise_user_attempts():
 
 ######################################## User Controllers ##################################################################
 
-
+#user dashboard
 @app.route('/user_dashboard/<name>', methods=["GET","POST"])
 def user_dashboard(name):
   if request.method=="GET":
-    quizzes = db.session.query(Quiz).order_by((Quiz.date_of_quiz)).all()
+    quizzes = db.session.query(Quiz).order_by((Quiz.date_of_quiz.desc())).all()
     for quiz in  quizzes:
       questions = db.session.query(Question).filter(Question.quiz_id == quiz.q_id).all()
       quiz.questions = questions
     return render_template("user_dashboard.html", name=name, quizzes=quizzes)
-  
+
+#explore subjects  
 @app.route('/explore_subject/<string:name>')
 def subject_for_quizzes(name):
   subjects= db.session.query(Subject).all()
   return render_template('subjectwise_quizzes.html', subjects=subjects, name=name)
 
+#explore chapters
 @app.route('/explore_subject/<int:subject_id>/<string:name>')
 def chapter_for_quizzes(subject_id, name):
   
   chapters= db.session.query(Chapter).filter(Chapter.subject_id == subject_id).all()
   return render_template('chapter_quizzes.html', chapters=chapters, name=name)
 
+#explore quizzes
 @app.route('/explore_subject/<int:subject_id>/<int:chapter_id>/<string:name>')
 def quiz_for_quizzes( subject_id, chapter_id, name):
   quizzes= db.session.query(Quiz).filter(Quiz.chapter_id == chapter_id).all()
   chapter = db.session.query(Chapter).filter(Chapter.ch_id == chapter_id).first()
   return render_template('user_quizzes.html', chapter=chapter, quizzes=quizzes, name=name)
 
+#main quiz page
 @app.route('/attempt_quiz/<int:quiz_id>/<string:name>', methods=['GET','POST'])
 def mainquiz(quiz_id, name):
   if request.method == 'GET':
     quiz = db.session.query(Quiz).filter(Quiz.q_id == quiz_id).first()
+    current_date_time = datetime.now()
+    date_of_quiz = quiz.date_of_quiz
+    
+    if(date_of_quiz < current_date_time):
+      return render_template('error.html', name=name)
+      
+  
+
     questions = db.session.query(Question).filter(Question.quiz_id == quiz_id).all()
     return render_template('user_mainquiz.html', quiz=quiz, questions=questions, name=name)
   elif request.method == 'POST':
@@ -439,7 +520,8 @@ def mainquiz(quiz_id, name):
     db.session.add(new_score)
     db.session.commit()
     return redirect('/score/' + name)
-  
+
+#all scores are shown   
 @app.route('/score/<string:name>', methods=['GET','POST']) 
 def quiz_score(name):
   if request.method=="GET":
@@ -447,12 +529,8 @@ def quiz_score(name):
     scores = db.session.query(Scores).filter(Scores.user_id == user.user_id).order_by(Scores.timestamp_of_attempt).all()
     return render_template("quiz_score.html", scores=scores, name=name)
 
-#customer details 
-@app.route('/admin_user/<string:name>', methods=['GET', 'POST'])
-def admin_user(name):
-  if request.method=="GET":
-     users=db.session.query(User).all()
-     return render_template("admin_user.html", users=users, name=name)
+
+
   
 
 #user_summary
@@ -472,7 +550,7 @@ def user_summary(name):
 
   return render_template("user_summary.html", name=name)
 
-#bar chart
+#pie chart for user
 def subjectwise_quiz_attempts(name):
   user = User.query.filter_by(email=name).first()
   if not user :
@@ -486,19 +564,17 @@ def subjectwise_quiz_attempts(name):
     else:
       sub_attempts[subject.name] = 1
 
-  x_names = list(sub_attempts.keys())
-  y_counts = list(sub_attempts.values())
+  labels = list(sub_attempts.keys())
+  sizes = list(sub_attempts.values())
 
-  plt.figure(figsize=(20, 10))
-  plt.bar(x_names, y_counts, color='blue', width=0.4)
-  plt.title("Subjectwise number of quizzes attempts", fontsize=40)
-  plt.xlabel("Subjects", fontsize=35)
-  plt.ylabel("No. of Quizzes Attempted", fontsize=35)
-  plt.xticks(fontsize=35, rotation=10)
-  plt.yticks(fontsize=35)
+  plt.figure(figsize=(8,8))
+  plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, colors=['red', 'green', 'yellow', 'orange', 'violet'])
+  plt.title('Subjectwise number of quizzes attempts', fontsize=16)
   return plt
 
-#pie chart
+  
+
+#bar chart for user
 def subjectwise_average(name):
   user = User.query.filter_by(email=name).first()
   if not user :
@@ -518,13 +594,20 @@ def subjectwise_average(name):
   for sub in sub_scores:
     average_scores[sub] = sub_scores[subject]/sub_attempts[sub]
 
-  labels = list(average_scores.keys())
-  sizes = list(average_scores.values())
+  x_names = list(average_scores.keys())
+  y_counts = list(average_scores.values())
 
-  plt.figure(figsize=(8,8))
-  plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140, colors=['red', 'green', 'yellow', 'orange', 'violet'])
-  plt.title('Subjectwise Average Scores', fontsize=16)
+  plt.figure(figsize=(20, 10))
+  plt.bar(x_names, y_counts, color='blue', width=0.4)
+  plt.title("Subjectwise Average Scores", fontsize=40)
+  plt.xlabel("Subjects", fontsize=35)
+  plt.ylabel("Average scores", fontsize=35)
+  plt.xticks(fontsize=35, rotation=10)
+  plt.yticks(fontsize=35)
   return plt
+
+
+  
 
     
 
@@ -548,7 +631,7 @@ def admin_search(name):
       return render_template("quiz_search.html", name=name, quizzes=by_quiz)
   return redirect('/admin_dashboard/'+"/"+str(name))
 
-#supported functions
+#supporting functions for admin dashboard
 def search_by_subject(search):
   subjects = Subject.query.filter(Subject.name.ilike(f"%{search}%")).all()
   return subjects
@@ -578,7 +661,7 @@ def user_search(name):
       return render_template("user_dashboard.html", name=name, quizzes=by_quiz)
   return redirect('/user_dashboard/'+"/"+str(name))
 
-##Supporting function for user dashboard
+#Supporting function for user dashboard
 def user_search_by_subject(search):
   subjects = db.session.query(Subject.sub_id).filter(Subject.name.ilike(f"%{search}%"))
   chapters = db.session.query(Chapter.ch_id).filter(Chapter.subject_id.in_(subjects))

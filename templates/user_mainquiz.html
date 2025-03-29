@@ -10,6 +10,7 @@
   <title>User Dashboard</title>
 </head>
 <body>
+  <div id="duration" hidden>{{quiz.time_duration}}</div>
 
 
   <div class="container new-container">
@@ -48,6 +49,7 @@
         </div>
       </div>
     </nav>
+    <div id="timer-container" style="padding:0.4rem; margin:0 0 0 1150px; width:fit-content; position:fixed; font-size:1.5rem; background-color:bisque;">Time Left:<span id="minutes"></span> m <span id="seconds"></span> s</div>
     <div class="quiz-container">
       <h1 style="text-align: center;">{{quiz.chapter.name}} {{quiz.q_title}}</h1>
       <form method="POST" action="/attempt_quiz/{{quiz.q_id}}/{{name}}" >
@@ -60,7 +62,7 @@
           <li class="option"><input type="radio" name="{{question.ques_id}}" id="option_3" value="3" ><label for="question">&nbsp; {{question.option_3}}</label></li>
           <li class="option"><input type="radio" name="{{question.ques_id}}" id="option_4" value="4"  ><label for="question">&nbsp; {{question.option_4}}</label></li>
         </ul>
-      </div>
+      
       {% endfor %}
       
     </div>
@@ -71,3 +73,30 @@
     </div>
   </div>
 </body>
+<script>
+  let duration = document.getElementById('duration').innerText
+  let minutes = duration - 1
+  let seconds = 60 - 1
+  let min_part = document.getElementById('minutes')
+  let sec_part = document.getElementById('seconds')
+  min_part.innerText = minutes
+  sec_part.innerText = seconds
+  let timer_container = document.getElementById('timer-container')
+
+  let timer = setInterval(()=> {
+    seconds -= 1;
+    sec_part.innerText = seconds
+    if(seconds === 0){
+      minutes -= 1;
+      min_part.innerText = minutes
+      seconds = 59
+    }
+    if(minutes === 0){
+      if(seconds === 0){
+        timer_container.innerText = 'Time Over !!'
+      }
+    }
+  }, 1000)
+
+</script>
+</html>
