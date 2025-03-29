@@ -35,7 +35,8 @@ To run the project, go to the root directory, then,
       ```python app.py```
 
 
-
+Commiting for milestone Requirements:
+- Milestone 0: GitHub Repository Setup ( Mandatory )
 
 
  
