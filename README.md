@@ -38,6 +38,6 @@ To run the project, go to the root directory, then,
 Commiting for milestone Requirements:
 - Milestone 0: GitHub Repository Setup ( Mandatory )
 - Milestone 1: Database Models and Schema Setup
-
+- Milestone 2: Authentication and Role Management
 
  
