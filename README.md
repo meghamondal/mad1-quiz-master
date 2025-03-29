@@ -41,4 +41,5 @@ Commiting for milestone Requirements:
 - Milestone 2: Authentication and Role Management
 - Milestone 3: Admin Dashboard and Management
 - Milestone 4: User Dashboard and Quiz Attempt System
+- Milestone 5: Score Management and Quiz Result Display
  
