@@ -42,4 +42,5 @@ Commiting for milestone Requirements:
 - Milestone 3: Admin Dashboard and Management
 - Milestone 4: User Dashboard and Quiz Attempt System
 - Milestone 5: Score Management and Quiz Result Display
+- Milestone 6: Search Functionality for Admin and Users
  
