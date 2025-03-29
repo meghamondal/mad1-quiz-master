@@ -39,5 +39,6 @@ Commiting for milestone Requirements:
 - Milestone 0: GitHub Repository Setup ( Mandatory )
 - Milestone 1: Database Models and Schema Setup
 - Milestone 2: Authentication and Role Management
+- Milestone 3: Admin Dashboard and Management
 
  
